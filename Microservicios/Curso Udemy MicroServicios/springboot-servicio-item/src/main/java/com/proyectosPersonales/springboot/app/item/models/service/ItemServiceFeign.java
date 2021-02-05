@@ -11,7 +11,7 @@ import com.proyectosPersonales.springboot.app.item.clientes.ProductoClienteRest;
 import com.proyectosPersonales.springboot.app.item.models.Item;
 
 @Service("serviceFeign")
-@Primary //se inyecta por defecto en el controlador en autowired
+//@Primary //se inyecta por defecto en el controlador en autowired
 public class ItemServiceFeign implements ItemService {
 	
 	@Autowired

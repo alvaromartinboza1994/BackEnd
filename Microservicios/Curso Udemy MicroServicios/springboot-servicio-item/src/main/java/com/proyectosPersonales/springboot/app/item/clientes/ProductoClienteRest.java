@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.proyectosPersonales.springboot.app.item.models.Producto;
 
-@FeignClient(name = "servicio-productos", url="localhost:8001") //indicamos que esta interfaz es un cliente Feign
+@FeignClient(name = "servicio-productos") //indicamos que esta interfaz es un cliente Feign
 public interface ProductoClienteRest {
 
 	@GetMapping("/listar") //misma ruta que el servico al que queremos conectar

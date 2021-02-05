@@ -15,7 +15,7 @@ import com.proyectosPersonales.springboot.app.item.models.service.ItemService;
 public class ItemController {
 
 	@Autowired
-	//@Qualifier("serviceFeign") equivalente a poner primary en el service
+	@Qualifier("serviceFeign") //equivalente a poner primary en el service
 	private ItemService itemService;
 	
 	@GetMapping("/listar")
