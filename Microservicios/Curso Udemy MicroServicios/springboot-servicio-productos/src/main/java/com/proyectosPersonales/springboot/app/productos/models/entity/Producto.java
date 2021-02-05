@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,9 @@ public class Producto implements Serializable{ //serializable convierte entidad 
 	@Column(name = "created_at")
 	@Temporal(TemporalType.DATE)
 	private Date createdAt;
+	
+	@Transient //indica que este campo no esta mapeado a la bbdd
+	private Integer port;
 	
 	public void prueba() {
 		Producto producto = new Producto.ProductoBuilder().build();
