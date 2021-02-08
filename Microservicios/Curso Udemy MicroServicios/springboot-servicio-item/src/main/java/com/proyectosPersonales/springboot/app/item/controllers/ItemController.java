@@ -28,7 +28,7 @@ public class ItemController {
 	@HystrixCommand(fallbackMethod = "metodoAlternativo")
 	@GetMapping("/ver/{id}/cantidad/{cantidad}")
 	public Item detalle(@PathVariable Long id, @PathVariable Integer cantidad) {
-		return itemService.findById(id,  cantidad);
+		return itemService.findById(id, cantidad);
 	}
 	
 	public Item metodoAlternativo(Long id, Integer cantidad) {

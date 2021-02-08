@@ -15,6 +15,6 @@ public interface ProductoClienteRest {
 	public List<Producto> listar();
 	
 	
-	@GetMapping("/listar/{id}")
+	@GetMapping("/ver/{id}")
 	public Producto detalle(@PathVariable Long id);
 }
