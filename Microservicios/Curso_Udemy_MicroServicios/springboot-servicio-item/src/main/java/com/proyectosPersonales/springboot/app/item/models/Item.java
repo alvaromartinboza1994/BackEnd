@@ -1,5 +1,6 @@
 package com.proyectosPersonales.springboot.app.item.models;
 
+import com.proyectosPersonales.springboot.app.commons.models.entity.Producto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
