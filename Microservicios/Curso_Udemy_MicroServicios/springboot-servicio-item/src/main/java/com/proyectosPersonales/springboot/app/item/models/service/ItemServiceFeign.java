@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.proyectosPersonales.springboot.app.item.clientes.ProductoClienteRest;
 import com.proyectosPersonales.springboot.app.item.models.Item;
+import com.proyectosPersonales.springboot.app.item.models.Producto;
 
 @Service("serviceFeign")
 //@Primary //se inyecta por defecto en el controlador en autowired
@@ -26,6 +27,24 @@ public class ItemServiceFeign implements ItemService {
 	@Override
 	public Item findById(Long id, Integer cantidad) {
 		return Item.builder().producto(clienteFeign.detalle(id)).cantidad(cantidad).build();
+	}
+
+	@Override
+	public Producto save(Producto producto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Producto update(Producto producto, Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void delete(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
