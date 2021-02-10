@@ -16,9 +16,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
+		
 		http.authorizeRequests().antMatchers("/api/security/oauth/token").permitAll()
 		.antMatchers(HttpMethod.GET, "/api/productos/listar", "/api/items/listar", "/api/usuarios/usuarios").permitAll()//hacemos que sean listas de acceso público para todos
-		.antMatchers(HttpMethod.GET, "/api/productos/ver/{id}", "/api/items/ver/{id}/cantidad/{cantidad}", "/api/usuarios/usuarios/{id}")
+		.antMatchers(HttpMethod.GET, "/api/productos/ver/{id}", "/api/items/ver/{id}/cantidad/{cantidad}", "/api/usuarios/**")
 		.hasAnyRole("ADMIN", "USER") //para roles admin y user
 		.antMatchers("/api/productos/**", "/api/items/**", "/api/usuarios/**")
 		.hasRole("ADMIN")//forma genérica y similar a lo comentado a continuacion
