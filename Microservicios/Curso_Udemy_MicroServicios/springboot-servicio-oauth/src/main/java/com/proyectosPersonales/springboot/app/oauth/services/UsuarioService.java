@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class UsuarioService implements UserDetailsService{
+public class UsuarioService implements UserDetailsService, IUsuarioService{
 	
 	@Autowired
 	private UsuarioFeignClient client;
@@ -41,6 +41,11 @@ public class UsuarioService implements UserDetailsService{
 		
 		return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(),
 				true, true, true, authorities);
+	}
+
+	@Override
+	public Usuario findByUsername(String username) {
+		return client.findByUsername(username);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.proyectosPersonales.springboot.app.oauth.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
@@ -17,6 +20,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
 
+	@Autowired
+	private InfoAdicionalToken infoAdicionalToken;
+	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
@@ -48,10 +54,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(infoAdicionalToken, accesTokenConverter())); //para poder añadir informacion adicional al token
+		
 		//registrar authenticationManager
 		endpoints.authenticationManager(authenticationManager)
 		.tokenStore(tokenStore()) //componente que se encarga de guardar el token, generar el token con los datos del accesTokenConverter
-		.accessTokenConverter(accesTokenConverter());
+		.accessTokenConverter(accesTokenConverter())
+		.tokenEnhancer(tokenEnhancerChain);
 	}
 
 	@Bean
