@@ -48,4 +48,5 @@ public class Usuario implements Serializable {
 		inverseJoinColumns = @JoinColumn(name="rol_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id", "rol_id"})}) 
 	private List<Rol> roles;//se crea usuarios_roles
 	
+	private Integer intentos;
 }

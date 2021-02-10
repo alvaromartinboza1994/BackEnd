@@ -1,16 +1,24 @@
 package com.proyectosPersonales.springboot.app.oauth.security.event;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.proyectosPersonales.springboot.app.oauth.services.IUsuarioService;
+import com.proyectosPersonales.springboot.app.usuarios.commons.models.entity.Usuario;
+
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class AuthenticationSuccessErrorHandler implements AuthenticationEventPublisher{
+public class AuthenticationSuccessErrorHandler implements AuthenticationEventPublisher {
+
+	@Autowired
+	private IUsuarioService usuarioService;
 
 	@Override
 	public void publishAuthenticationSuccess(Authentication authentication) {
@@ -18,6 +26,12 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
 		String mensaje = "Success Login: " + user.getUsername();
 		System.out.println(mensaje);
 		log.info(mensaje);
+		
+		Usuario usuario = usuarioService.findByUsername(authentication.getName());
+		if(usuario.getIntentos() != null && usuario.getIntentos() > 0) {
+			usuario.setIntentos(0);
+			usuarioService.update(usuario, usuario.getId());
+		}
 	}
 
 	@Override
@@ -25,6 +39,23 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
 		String mensaje = "Error Login: " + exception.getMessage();
 		log.error(mensaje);
 		System.out.println(mensaje);
+		try {
+			Usuario usuario = usuarioService.findByUsername(authentication.getName());
+			if (usuario.getIntentos() == null) {
+				usuario.setIntentos(0);
+			} 
+			log.info("Intento actual es de: " + usuario.getIntentos());
+			usuario.setIntentos(usuario.getIntentos() + 1);
+			log.info("Intento después es de: " + usuario.getIntentos());
+			if(usuario.getIntentos() >= 3) {
+				log.info(String.format("El usuario %s deshabilitado por máximos eventos", usuario.getNombre()));
+				usuario.setEnabled(false);
+			}
+			usuarioService.update(usuario, usuario.getId());
+		} catch (FeignException e) {
+			log.error(String.format("El usuario %s no existe en el sistema", authentication.getName()));
+		}
+
 	}
 
 }
