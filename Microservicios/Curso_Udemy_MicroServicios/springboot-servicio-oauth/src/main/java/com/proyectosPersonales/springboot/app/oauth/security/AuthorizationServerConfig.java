@@ -3,8 +3,10 @@ package com.proyectosPersonales.springboot.app.oauth.security;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -16,9 +18,13 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+@RefreshScope
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
+	
+	@Autowired
+	private Environment env;
 
 	@Autowired
 	private InfoAdicionalToken infoAdicionalToken;
@@ -37,8 +43,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("frontendapp")//registrar clientes, necesita del identificador de nuestra aplicacion.
-		.secret(passwordEncoder.encode("12345"))//Secret = contraseña 
+		clients.inMemory().withClient(env.getProperty("config.security.oauth.client.id"))//registrar clientes, necesita del identificador de nuestra aplicacion.
+		.secret(passwordEncoder.encode(env.getProperty("config.security.oauth.client.secret")))//Secret = contraseña 
 		.scopes("read", "write") //alcance de nuestra aplicacion, permiso
 		.authorizedGrantTypes("password", "refresh_token") //tipo de concesion que va a tener nuestra autenticacion, cómo vamos a obtener el token. Utilizamos password cuando usamos credenciales, refresh_token, es una concesion que nos permite obtener un nuevo token de acceso completamente renovado (antes de que caduque el actual) 
 		.accessTokenValiditySeconds(3600)//tiempo de validez del token antes de que caduque
@@ -72,7 +78,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter accesTokenConverter() {
 		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-		tokenConverter.setSigningKey("algun_codigo_secreto_aeiou");
+		tokenConverter.setSigningKey(env.getProperty("config.security.oauth.jwt.key"));
 		return tokenConverter;
 	}
 	

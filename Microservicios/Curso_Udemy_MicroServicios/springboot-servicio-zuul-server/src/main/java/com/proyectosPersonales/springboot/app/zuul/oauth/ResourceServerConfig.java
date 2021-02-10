@@ -1,5 +1,7 @@
 package com.proyectosPersonales.springboot.app.zuul.oauth;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,16 +12,21 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+@RefreshScope
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
+	
+	@Value("${config.security.oauth.jwt.key}")
+	private String jwtKey;
+	
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		
 		http.authorizeRequests().antMatchers("/api/security/oauth/token").permitAll()
 		.antMatchers(HttpMethod.GET, "/api/productos/listar", "/api/items/listar", "/api/usuarios/usuarios").permitAll()//hacemos que sean listas de acceso público para todos
-		.antMatchers(HttpMethod.GET, "/api/productos/ver/{id}", "/api/items/ver/{id}/cantidad/{cantidad}", "/api/usuarios/**")
+		.antMatchers(HttpMethod.GET, "/api/productos/ver/{id}", "/api/items/ver/{id}/cantidad/{cantidad}", "/api/usuarios/usuarios/{id}")
 		.hasAnyRole("ADMIN", "USER") //para roles admin y user
 		.antMatchers("/api/productos/**", "/api/items/**", "/api/usuarios/**")
 		.hasRole("ADMIN")//forma genérica y similar a lo comentado a continuacion
@@ -43,7 +50,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	@Bean
 	public JwtAccessTokenConverter accesTokenConverter() {
 		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-		tokenConverter.setSigningKey("algun_codigo_secreto_aeiou");
+		tokenConverter.setSigningKey(jwtKey);
 		return tokenConverter;
 	}
 	
