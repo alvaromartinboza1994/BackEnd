@@ -25,14 +25,25 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(security);
+		security.tokenKeyAccess("permitAll") //permisos que van a tener los endpoints de oauth para generar y validar el token
+		.checkTokenAccess("isAuthenticated()"); //validar el token, metodo de springSecurity que nos permite ver si el usuario está autenticado
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(clients);
+		clients.inMemory().withClient("frontendapp")//registrar clientes, necesita del identificador de nuestra aplicacion.
+		.secret(passwordEncoder.encode("12345"))//Secret = contraseña 
+		.scopes("read", "write") //alcance de nuestra aplicacion, permiso
+		.authorizedGrantTypes("password", "refresh_token") //tipo de concesion que va a tener nuestra autenticacion, cómo vamos a obtener el token. Utilizamos password cuando usamos credenciales, refresh_token, es una concesion que nos permite obtener un nuevo token de acceso completamente renovado (antes de que caduque el actual) 
+		.accessTokenValiditySeconds(3600)//tiempo de validez del token antes de que caduque
+		.refreshTokenValiditySeconds(3600);
+		/*.and() para separar clientes
+		.withClient("androiddapp")//registrar clientes, necesita del identificador de nuestra aplicacion.
+		.secret(passwordEncoder.encode("12345"))//Secret = contraseña 
+		.scopes("read", "write") //alcance de nuestra aplicacion, permiso
+		.authorizedGrantTypes("password", "refresh_token") //tipo de concesion que va a tener nuestra autenticacion, cómo vamos a obtener el token. Utilizamos password cuando usamos credenciales, refresh_token, es una concesion que nos permite obtener un nuevo token de acceso completamente renovado (antes de que caduque el actual) 
+		.accessTokenValiditySeconds(3600)//tiempo de validez del token antes de que caduque
+		.refreshTokenValiditySeconds(3600);*/
 	}
 
 	@Override
