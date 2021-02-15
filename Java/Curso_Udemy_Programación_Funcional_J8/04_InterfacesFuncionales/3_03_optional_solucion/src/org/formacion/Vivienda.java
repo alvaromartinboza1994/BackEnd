@@ -9,13 +9,13 @@ public class Vivienda {
 	private String nombre;
 
 	public Vivienda(Persona propietario, String nombre) {
-		this.nombre = nombre;
 		this.propietario = Optional.ofNullable(propietario);
+		this.nombre = nombre;
 	}
 	
 	public Vivienda(String nombre) {
-		this.nombre = nombre;
 		this.propietario = Optional.empty();
+		this.nombre = nombre;
 	}
 
 	public Optional<Persona> getPropietario() {
@@ -27,7 +27,7 @@ public class Vivienda {
 	}
 	
 	public Optional<String> nombrePropietario() {
-		return propietario.map(persona -> persona.getNombre());
+		return propietario.map(it -> it.getNombre());
 	}
 	
 	
