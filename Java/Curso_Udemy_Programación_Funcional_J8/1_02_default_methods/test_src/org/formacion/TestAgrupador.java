@@ -34,7 +34,7 @@ public class TestAgrupador {
 	public void test_addAll() {
 		
 		Agrupador agrupador = new AgrupadorConList();
-		// agrupador.addAll(Arrays.asList("primero","segundo"));
+		agrupador.addAll(Arrays.asList("primero","segundo"));
 		
 		Assert.assertEquals(2,agrupador.numeroElementos());
 	}

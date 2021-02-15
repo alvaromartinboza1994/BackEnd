@@ -1,6 +1,6 @@
 package org.formacion;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface Agrupador {
 
@@ -8,4 +8,7 @@ public interface Agrupador {
 	
 	int numeroElementos();
 	
+	default void addAll (List<String> list) {
+		list.forEach(elemento -> add(elemento));
+	}
 }
