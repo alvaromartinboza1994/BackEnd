@@ -21,8 +21,7 @@ public class TestIntroduccion {
 		// segun la longitud de MAYOR a MENOR (es decir, al contrario que el ejemplo de
 		// la presentacion.
 		// * solo debes modificar la siguiente linea, el resto de codigo debe quedar igual *
-		Comparator<String> comparadorLongitud = null;
-
+		Comparator<String> comparadorLongitud = (o1, o2) -> o2.length() - o1.length();
 		assertNotNull("No has creado aun el comparador",comparadorLongitud);
 		
 		Collections.sort(nombres,comparadorLongitud);
