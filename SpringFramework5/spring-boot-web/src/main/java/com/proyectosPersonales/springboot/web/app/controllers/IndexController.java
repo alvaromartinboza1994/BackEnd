@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.proyectosPersonales.springboot.web.app.models.Usuario;
@@ -32,12 +33,16 @@ public class IndexController {
 	
 	@RequestMapping("/listar")
 	public String listar(Model model) {
+		model.addAttribute("titulo", "Listado de usuarios");
+		return "listar";
+	}
+	
+	@ModelAttribute("usuarios")//es comun a todos los metodos del controlador, lo usamos cuando queremos pasar datos a la vista que son comunes a varios metodos handler del controlador o cuando es un formulario para poblar los campos
+	public List<Usuario> poblarUsuarios() {
 		List<Usuario> usuarios = Arrays.asList(Usuario.builder().nombre("Alvaro").apellido("Martin").email("micorreo@gmail.com").build(),
 				Usuario.builder().nombre("Paca").apellido("Hains").email("micorreo2@gmail.com").build(),
 				Usuario.builder().nombre("Hipo").apellido("Potamo").email("micorreo3@gmail.com").build(),
 				Usuario.builder().nombre("Taza").apellido("Te").email("micorreo4@gmail.com").build());
-		model.addAttribute("titulo", "Listado de usuarios");
-		model.addAttribute("usuarios", usuarios);
-		return "listar";
+		return usuarios;
 	}
 }
