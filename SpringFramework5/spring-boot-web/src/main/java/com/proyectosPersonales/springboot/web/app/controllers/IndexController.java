@@ -3,9 +3,11 @@ package com.proyectosPersonales.springboot.web.app.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller //componente de spring de tipo controlador. Toda clase anotada con component, será un objeto manejado por el contenedor de spring framework automaticamente
 //maneja las consultas del usuario
+@RequestMapping("/app")//ruta de primer nivel generica para todos los metodos del controlador
 public class IndexController { 
 
 	@GetMapping({"/index" , "/", "/home"})//tres rutas posibles para este metodo
