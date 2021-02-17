@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,19 @@ import com.proyectosPersonales.springboot.web.app.models.Usuario;
 //maneja las consultas del usuario
 @RequestMapping("/app")//ruta de primer nivel generica para todos los metodos del controlador
 public class IndexController { 
+	
+	@Value("${texto.indexcontroller.index.titulo}")
+	private String textoIndex;
+	
+	@Value("${texto.indexcontroller.perfil.titulo}")
+	private String textoPerfil;
+	
+	@Value("${texto.indexcontroller.listar.titulo}")
+	private String textoListar;
 
 	@GetMapping({"/index" , "/", "/home"})//tres rutas posibles para este metodo
 	public String index(Model model) {//model usa un mapa de java para asignar valores mediante llave y valor. Tambien vale con ModelMap, Map<String, Object> -> put y ModelAndView -> addObject (return ModelAndView)
-		model.addAttribute("titulo", "hola Spring Framework!");
+		model.addAttribute("titulo", textoIndex);
 		return "index";
 	}
 	
@@ -27,13 +37,13 @@ public class IndexController {
 	public String perfil(Model model) {
 		Usuario usuario = Usuario.builder().nombre("Alvaro").apellido("Martin").email("micorreo@gmail.com").build();
 		model.addAttribute("usuario", usuario);
-		model.addAttribute("titulo", "Perfil del usuario: ".concat(usuario.getNombre()));
+		model.addAttribute("titulo", textoPerfil.concat(usuario.getNombre()));
 		return "perfil";
 	}
 	
 	@RequestMapping("/listar")
 	public String listar(Model model) {
-		model.addAttribute("titulo", "Listado de usuarios");
+		model.addAttribute("titulo", textoListar);
 		return "listar";
 	}
 	
