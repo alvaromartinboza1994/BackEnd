@@ -12,7 +12,7 @@ import com.proyectosPersonales.springboot.di.app.models.service.IServicio;
 public class indexController {
 
 	@Autowired // busca en el contenedor de Spring algun objeto de tipo MiServicio
-	//@Qualifier("miServicioPrincipal")//concretamos que servicio queremos inyectar
+	@Qualifier("miServicioComplejo")//concretamos que servicio queremos inyectar
 	private IServicio servicio;
 
 	// private MiServicio servicio = new MiServicio(); //acoplamiento alto
