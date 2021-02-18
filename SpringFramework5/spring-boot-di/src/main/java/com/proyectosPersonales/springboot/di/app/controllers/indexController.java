@@ -9,16 +9,24 @@ import com.proyectosPersonales.springboot.di.app.models.service.IServicio;
 
 @Controller
 public class indexController {
-	
-	@Autowired //busca en el contenedor de Spring algun objeto de tipo MiServicio
+
+	@Autowired // busca en el contenedor de Spring algun objeto de tipo MiServicio
 	private IServicio servicio;
-	
-	//private MiServicio servicio = new MiServicio(); //acoplamiento alto
-	
-	@GetMapping({"/", "", "/index"})
+
+	// private MiServicio servicio = new MiServicio(); //acoplamiento alto
+
+	@GetMapping({ "/", "", "/index" })
 	public String index(Model model) {
 		model.addAttribute("objeto", servicio.operacion());
 		return "index";
 	}
+
+	/*
+	 * @Autowired public indexController(IServicio servicio) { super();
+	 * this.servicio = servicio; }
+	 * 
+	 * @Autowired public void setServicio(IServicio servicio) { this.servicio =
+	 * servicio; }
+	 */
 
 }
