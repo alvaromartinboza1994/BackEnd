@@ -11,5 +11,9 @@ public class ItemFactura {
 	
 	private Producto producto;
 	private Integer cantidad;
+	
+	public Integer calcularImporte() {
+		return cantidad * producto.getPrecio();
+	}
 
 }
