@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.proyectosPersonales.springboot.di.app.models.service.MiServicio;
+import com.proyectosPersonales.springboot.di.app.models.service.IServicio;
 
 @Controller
 public class indexController {
 	
 	@Autowired //busca en el contenedor de Spring algun objeto de tipo MiServicio
-	private MiServicio servicio;
+	private IServicio servicio;
 	
 	//private MiServicio servicio = new MiServicio(); //acoplamiento alto
 	
