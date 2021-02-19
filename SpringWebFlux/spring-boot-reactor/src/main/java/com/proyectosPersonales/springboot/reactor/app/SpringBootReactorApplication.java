@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.proyectosPersonales.springboot.reactor.app.Models.Comentarios;
 import com.proyectosPersonales.springboot.reactor.app.Models.Usuario;
 import com.proyectosPersonales.springboot.reactor.app.Models.UsuarioComentarios;
+import com.sun.jdi.InternalException;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
@@ -29,7 +31,7 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploDelayElements();
+		ejemploIntervalInfinito();
 	}
 	
 	public void ejemploDelayElements() throws InterruptedException {//alternativa para retrasar hilos
@@ -41,6 +43,26 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 		
 		//rango.subscribe();
 		//Thread.sleep(13000);
+	}
+	
+	public void ejemploIntervalInfinito() throws InterruptedException {
+		CountDownLatch latch = new CountDownLatch(1); //comienza en 1
+		
+		Flux.interval(Duration.ofSeconds(1))
+		.doOnTerminate(() -> latch.countDown())//decrementa latch.  este evento se ejecutara falle o no falle
+		.flatMap(i -> {
+			if(i >= 5) {
+				return Flux.error(new InternalException("Solo hasta 5!"));
+			} else {
+				return Flux.just(i); //observable con el valor que se esta emitiendo
+			}
+		})
+		.map(i -> "Hola" + i)
+		//.doOnNext(s -> log.info(s))
+		.retry(2) //si hay un error lo intenta dos veces mas
+		.subscribe(s -> log.info(s), e -> log.error(e.getMessage()));
+		
+		latch.await();//espera hasta que el contador llegue a 0, libera el thread
 	}
 	
 	public void ejemploInterval() {//no se mostrara en el terminal. El flujo se sigue ejecutando en segundo plano, se sigue ejecutando en la maquina virtual de java. CARACTERISTICA DE PROGRAMACIÓN REACTIVA -> SE EJECUTAN EN DIFERENTES HILOS
