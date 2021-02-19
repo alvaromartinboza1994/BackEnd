@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,7 +34,48 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploIntervalDesdeCreate();
+		ejemploContraPresion();
+	}
+	
+	public void ejemploContraPresion() {
+		Flux.range(1, 10)
+		.log()//el suscriptor va a solicitar la maxima cantaidad de elementos por defecto
+		//.limitRate(5) alternativa a sobreescribir todo el subscriber
+		.subscribe(new Subscriber<Integer>() {
+
+			private Subscription s;
+			private Integer limite = 5;
+			private Integer consumido = 0;
+			
+			@Override
+			public void onSubscribe(Subscription s) {//lo que podemos pedir al productor
+				this.s = s;
+				s.request(limite);//todos los elementos por defecto
+				consumido++;
+			}
+
+			@Override
+			public void onNext(Integer t) {//cada vez que manejamos un objeto
+				log.info(t.toString());		
+				consumido++;
+				if(consumido == limite) {
+					consumido = 0;
+					s.request(limite);//volvemos a pedir dos mas
+				}
+			}
+
+			@Override
+			public void onError(Throwable t) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onComplete() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	public void ejemploIntervalDesdeCreate() {
