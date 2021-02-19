@@ -1,9 +1,10 @@
 package com.proyectosPersonales.springboot.reactor.app;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
 import org.springframework.boot.CommandLineRunner;
@@ -31,7 +32,35 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploIntervalInfinito();
+		ejemploIntervalDesdeCreate();
+	}
+	
+	public void ejemploIntervalDesdeCreate() {
+		Flux.create(emmitter -> {
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				private Integer contador = 0;
+				@Override
+				public void run() {
+					emmitter.next(++contador);
+					if(contador == 10) {
+						timer.cancel();
+						emmitter.complete();
+					}
+					if(contador == 5) {
+						timer.cancel();
+						emmitter.error(new InterruptedException("Error, se ha detenido el flux en 5!"));
+					}
+				}
+			}, 1000, 1000);
+		})
+				/*
+				 * .doOnNext(next -> log.info(next.toString())) .doOnComplete(() ->
+				 * log.info("Hemos terminado"))
+				 */
+		.subscribe(next -> log.info(next.toString()), 
+				error -> log.error(error.getMessage()),
+				() -> log.info("Hemos terminado"));
 	}
 	
 	public void ejemploDelayElements() throws InterruptedException {//alternativa para retrasar hilos
