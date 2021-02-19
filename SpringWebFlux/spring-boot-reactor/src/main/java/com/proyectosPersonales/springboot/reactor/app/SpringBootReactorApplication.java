@@ -22,13 +22,14 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 	@Override
 	public void run(String... args) throws Exception {
 		// creacion del primer observable
-		Flux<Usuario> nombres = Flux.just("Alvaro", "Reme", "Jose Joaquin", "Pepa", "Tania", "Carmen")
-				.map(nombre -> new Usuario(nombre.toUpperCase(), null))
+		Flux<Usuario> nombres = Flux.just("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz", "Pepa Pig", "Juan Mengano", "Tania Martín", "Carmen Barrero")
+				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
+				.filter(usuario -> { return usuario.getNombre().toLowerCase().equals("pepa"); })
 				.doOnNext(usuario -> {
 					if (usuario == null) {
 						throw new RuntimeException("Nombres no pueden ser vacíos"); // manejo de errors
 					} else {
-						System.out.println(usuario.getNombre());
+						System.out.println(usuario.getNombre().concat(" ").concat(usuario.getApellido()));
 					}
 				}) // publiser = observable. cada vez que se emita un elemento, se imprime en
 					// pantalla
