@@ -28,53 +28,90 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploUsuarioComentariosFlatMap();
+		ejemploUsuarioComentariosZipWithForma2();
 	}
-	
-	public void ejemploUsuarioComentariosFlatMap() {
+
+	public void ejemploUsuarioComentariosZipWith() {
 		Mono<Usuario> usuarioMono = Mono.fromCallable(() -> Usuario.builder().nombre("Homer").apellido("Simpson").build());
 	
 		Mono<Comentarios> comentariosUsuarioMono = Mono.fromCallable(() -> {
 			return Comentarios.builder().comentarios(Arrays.asList("Hola qué tal?", "Yo bien, y tu?", "Bien bien jeje")).build();
 		});
 		
-		usuarioMono.flatMap(usuario -> comentariosUsuarioMono
-				.map(comentario -> UsuarioComentarios.builder().usuario(usuario).comentarios(comentario)))
-		.subscribe(uc -> log.info(uc.toString())); //convertir a un flujo combinado de usuarioComentarios
+		Mono<UsuarioComentarios> usuarioConComentarios = usuarioMono.zipWith(comentariosUsuarioMono, (usuario, comentariosUsuario) -> UsuarioComentarios.builder().usuario(usuario).comentarios(comentariosUsuario).build());
+		
+		usuarioConComentarios.subscribe(uc -> log.info(uc.toString())); //convertir a un flujo combinado a usuarioComentarios. ALTERNATIVA A FLATMAP
 	}
 	
+	public void ejemploUsuarioComentariosZipWithForma2() {
+		Mono<Usuario> usuarioMono = Mono.fromCallable(() -> Usuario.builder().nombre("Homer").apellido("Simpson").build());
+	
+		Mono<Comentarios> comentariosUsuarioMono = Mono.fromCallable(() -> {
+			return Comentarios.builder().comentarios(Arrays.asList("Hola qué tal?", "Yo bien, y tu?", "Bien bien jeje")).build();
+		});
+		
+		Mono<UsuarioComentarios> usuarioConComentarios = usuarioMono
+				.zipWith(comentariosUsuarioMono)
+				.map(tuple -> {
+					Usuario u = tuple.getT1();
+					Comentarios c = tuple.getT2();
+					return UsuarioComentarios.builder().usuario(u).comentarios(c).build();
+				});
+		
+		usuarioConComentarios.subscribe(uc -> log.info(uc.toString())); //convertir a un flujo combinado a usuarioComentarios. ALTERNATIVA A FLATMAP
+	}
+
+	public void ejemploUsuarioComentariosFlatMap() {
+		Mono<Usuario> usuarioMono = Mono
+				.fromCallable(() -> Usuario.builder().nombre("Homer").apellido("Simpson").build());
+
+		Mono<Comentarios> comentariosUsuarioMono = Mono.fromCallable(() -> {
+			return Comentarios.builder().comentarios(Arrays.asList("Hola qué tal?", "Yo bien, y tu?", "Bien bien jeje"))
+					.build();
+		});
+
+		usuarioMono
+				.flatMap(usuario -> comentariosUsuarioMono
+						.map(comentario -> UsuarioComentarios.builder().usuario(usuario).comentarios(comentario)))
+				.subscribe(uc -> log.info(uc.toString())); // convertir a un flujo combinado de usuarioComentarios
+	}
+
 	public void ejemploToCollectList() throws Exception {
 		// creacion del primer observable
-		List<Usuario> usuariosList = Arrays.asList(Usuario.builder().nombre("Álvaro").apellido("Martín").build(), Usuario.builder().nombre("Reme").apellido("Boza").build(),
-				Usuario.builder().nombre("José Joaquín").apellido("Martín").build(), Usuario.builder().nombre("Pepa").apellido("Muñoz").build(),
-				Usuario.builder().nombre("Pepa").apellido("Pig").build(), Usuario.builder().nombre("Juan").apellido("Mengano").build());
+		List<Usuario> usuariosList = Arrays.asList(Usuario.builder().nombre("Álvaro").apellido("Martín").build(),
+				Usuario.builder().nombre("Reme").apellido("Boza").build(),
+				Usuario.builder().nombre("José Joaquín").apellido("Martín").build(),
+				Usuario.builder().nombre("Pepa").apellido("Muñoz").build(),
+				Usuario.builder().nombre("Pepa").apellido("Pig").build(),
+				Usuario.builder().nombre("Juan").apellido("Mengano").build());
 
-		Flux.fromIterable(usuariosList)
-		.collectList()//convierte a un solo objeto que seria la lista de usuarios
-		.subscribe(lista -> {//se emite UNA SOLA VEZ
-			lista.forEach(item -> log.info(item.toString()));
-		});
+		Flux.fromIterable(usuariosList).collectList()// convierte a un solo objeto que seria la lista de usuarios
+				.subscribe(lista -> {// se emite UNA SOLA VEZ
+					lista.forEach(item -> log.info(item.toString()));
+				});
 	}
-	
+
 	public void ejemploToString() throws Exception {
 		// creacion del primer observable
-		List<Usuario> usuariosList = Arrays.asList(Usuario.builder().nombre("Álvaro").apellido("Martín").build(), Usuario.builder().nombre("Reme").apellido("Boza").build(),
-				Usuario.builder().nombre("José Joaquín").apellido("Martín").build(), Usuario.builder().nombre("Pepa").apellido("Muñoz").build(),
-				Usuario.builder().nombre("Pepa").apellido("Pig").build(), Usuario.builder().nombre("Juan").apellido("Mengano").build());
+		List<Usuario> usuariosList = Arrays.asList(Usuario.builder().nombre("Álvaro").apellido("Martín").build(),
+				Usuario.builder().nombre("Reme").apellido("Boza").build(),
+				Usuario.builder().nombre("José Joaquín").apellido("Martín").build(),
+				Usuario.builder().nombre("Pepa").apellido("Muñoz").build(),
+				Usuario.builder().nombre("Pepa").apellido("Pig").build(),
+				Usuario.builder().nombre("Juan").apellido("Mengano").build());
 
-		Flux.fromIterable(usuariosList)
-				.map(usuario -> usuario.getNombre().toUpperCase().concat(" ").concat(usuario.getApellido().toUpperCase()))
-				.flatMap(nombre -> { //tipo filter
-					if(nombre.contains("pepa".toUpperCase())) {
-						return Mono.just(nombre);//como es un solo elemento devolvemos Mono -> devolvemos un observable, fusionandolo al mimso stream. REDUCE EL STREAM ACTUAL
+		Flux.fromIterable(usuariosList).map(
+				usuario -> usuario.getNombre().toUpperCase().concat(" ").concat(usuario.getApellido().toUpperCase()))
+				.flatMap(nombre -> { // tipo filter
+					if (nombre.contains("pepa".toUpperCase())) {
+						return Mono.just(nombre);// como es un solo elemento devolvemos Mono -> devolvemos un
+													// observable, fusionandolo al mimso stream. REDUCE EL STREAM ACTUAL
 					} else {
 						return Mono.empty();
 					}
-				})
-				.map(nombre -> {
+				}).map(nombre -> {
 					return nombre.toLowerCase();
-				})
-				.subscribe(nombre -> log.info(nombre.toString()));// consume contenido del publiser.;
+				}).subscribe(nombre -> log.info(nombre.toString()));// consume contenido del publiser.;
 	}
 
 	public void ejemploFlatMap() throws Exception {
@@ -84,19 +121,18 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 		Flux.fromIterable(usuariosList)
 				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
-				.flatMap(usuario -> { //tipo filter
-					if(usuario.getNombre().equalsIgnoreCase("pepa")) {
-						return Mono.just(usuario);//como es un solo elemento devolvemos Mono -> devolvemos un observable, fusionandolo al mimso stream. REDUCE EL STREAM ACTUAL
+				.flatMap(usuario -> { // tipo filter
+					if (usuario.getNombre().equalsIgnoreCase("pepa")) {
+						return Mono.just(usuario);// como es un solo elemento devolvemos Mono -> devolvemos un
+													// observable, fusionandolo al mimso stream. REDUCE EL STREAM ACTUAL
 					} else {
 						return Mono.empty();
 					}
-				})
-				.map(usuario -> {
+				}).map(usuario -> {
 					String nombre = usuario.getNombre().toLowerCase();
 					usuario.setNombre(nombre);
 					return usuario;
-				})
-				.subscribe(usuario -> log.info(usuario.toString()));// consume contenido del publiser.;
+				}).subscribe(usuario -> log.info(usuario.toString()));// consume contenido del publiser.;
 	}
 
 	public void ejemploIterable() throws Exception {
