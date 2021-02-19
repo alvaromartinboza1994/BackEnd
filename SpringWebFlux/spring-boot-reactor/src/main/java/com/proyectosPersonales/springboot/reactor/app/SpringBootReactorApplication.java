@@ -8,7 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.proyectosPersonales.springboot.reactor.app.Models.Comentarios;
 import com.proyectosPersonales.springboot.reactor.app.Models.Usuario;
+import com.proyectosPersonales.springboot.reactor.app.Models.UsuarioComentarios;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
@@ -26,7 +28,19 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploToCollectList();
+		ejemploUsuarioComentariosFlatMap();
+	}
+	
+	public void ejemploUsuarioComentariosFlatMap() {
+		Mono<Usuario> usuarioMono = Mono.fromCallable(() -> Usuario.builder().nombre("Homer").apellido("Simpson").build());
+	
+		Mono<Comentarios> comentariosUsuarioMono = Mono.fromCallable(() -> {
+			return Comentarios.builder().comentarios(Arrays.asList("Hola qué tal?", "Yo bien, y tu?", "Bien bien jeje")).build();
+		});
+		
+		usuarioMono.flatMap(usuario -> comentariosUsuarioMono
+				.map(comentario -> UsuarioComentarios.builder().usuario(usuario).comentarios(comentario)))
+		.subscribe(uc -> log.info(uc.toString())); //convertir a un flujo combinado de usuarioComentarios
 	}
 	
 	public void ejemploToCollectList() throws Exception {
