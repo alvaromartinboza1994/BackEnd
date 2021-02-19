@@ -1,5 +1,9 @@
 package com.proyectosPersonales.springboot.reactor.app;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,8 +26,10 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 	@Override
 	public void run(String... args) throws Exception {
 		// creacion del primer observable
-		Flux<String> nombres = Flux.just("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz", "Pepa Pig",
+		List<String>  usuariosList = Arrays.asList("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz", "Pepa Pig",
 				"Juan Mengano", "Tania Martín", "Carmen Barrero");
+		Flux<String> nombres = Flux.fromIterable(usuariosList); /*Flux.just("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz", "Pepa Pig",
+				"Juan Mengano", "Tania Martín", "Carmen Barrero");*/
 
 		// separando la declaracion inicial del resto, se convierte en un flujo
 		// diferente
@@ -44,15 +50,14 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 					usuario.setNombre(nombre);
 					return usuario;
 				});
-		log.info("FLUJO NOMBRES");
-		nombres.subscribe(e -> log.info(e.toString()), error -> log.error(error.getMessage()), new Runnable() {
-
-			@Override
-			public void run() {
-				log.info("Ha finalizado la ejecución del observable con éxito!");
-			}
-		});// consume contenido del publiser.
-		
+		/*
+		 * log.info("FLUJO NOMBRES"); nombres.subscribe(e -> log.info(e.toString()),
+		 * error -> log.error(error.getMessage()), new Runnable() {
+		 * 
+		 * @Override public void run() {
+		 * log.info("Ha finalizado la ejecución del observable con éxito!"); } });//
+		 * consume contenido del publiser.
+		 */		
 		log.info("FLUJO USUARIOS");
 		usuarios.subscribe(e -> log.info(e.toString()), error -> log.error(error.getMessage()), new Runnable() {
 
