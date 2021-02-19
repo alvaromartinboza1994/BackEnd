@@ -26,7 +26,20 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploToString();
+		ejemploToCollectList();
+	}
+	
+	public void ejemploToCollectList() throws Exception {
+		// creacion del primer observable
+		List<Usuario> usuariosList = Arrays.asList(Usuario.builder().nombre("Álvaro").apellido("Martín").build(), Usuario.builder().nombre("Reme").apellido("Boza").build(),
+				Usuario.builder().nombre("José Joaquín").apellido("Martín").build(), Usuario.builder().nombre("Pepa").apellido("Muñoz").build(),
+				Usuario.builder().nombre("Pepa").apellido("Pig").build(), Usuario.builder().nombre("Juan").apellido("Mengano").build());
+
+		Flux.fromIterable(usuariosList)
+		.collectList()//convierte a un solo objeto que seria la lista de usuarios
+		.subscribe(lista -> {//se emite UNA SOLA VEZ
+			lista.forEach(item -> log.info(item.toString()));
+		});
 	}
 	
 	public void ejemploToString() throws Exception {
