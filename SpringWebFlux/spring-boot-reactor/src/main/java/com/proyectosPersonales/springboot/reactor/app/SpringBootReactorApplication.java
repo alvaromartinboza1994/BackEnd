@@ -22,10 +22,16 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 	@Override
 	public void run(String... args) throws Exception {
 		// creacion del primer observable
-		Flux<Usuario> nombres = Flux.just("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz", "Pepa Pig", "Juan Mengano", "Tania Martín", "Carmen Barrero")
+		Flux<String> nombres = Flux.just("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz", "Pepa Pig",
+				"Juan Mengano", "Tania Martín", "Carmen Barrero");
+
+		// separando la declaracion inicial del resto, se convierte en un flujo
+		// diferente
+		Flux<Usuario> usuarios = nombres
 				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
-				.filter(usuario -> { return usuario.getNombre().toLowerCase().equals("pepa"); })
-				.doOnNext(usuario -> {
+				.filter(usuario -> {
+					return usuario.getNombre().toLowerCase().equals("pepa");
+				}).doOnNext(usuario -> {
 					if (usuario == null) {
 						throw new RuntimeException("Nombres no pueden ser vacíos"); // manejo de errors
 					} else {
@@ -38,8 +44,17 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 					usuario.setNombre(nombre);
 					return usuario;
 				});
-		
+		log.info("FLUJO NOMBRES");
 		nombres.subscribe(e -> log.info(e.toString()), error -> log.error(error.getMessage()), new Runnable() {
+
+			@Override
+			public void run() {
+				log.info("Ha finalizado la ejecución del observable con éxito!");
+			}
+		});// consume contenido del publiser.
+		
+		log.info("FLUJO USUARIOS");
+		usuarios.subscribe(e -> log.info(e.toString()), error -> log.error(error.getMessage()), new Runnable() {
 
 			@Override
 			public void run() {
