@@ -12,6 +12,7 @@ import com.proyectosPersonales.springboot.reactor.app.Models.Usuario;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 @Slf4j
@@ -25,11 +26,41 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
+		ejemploFlatMap();
+	}
+
+	public void ejemploFlatMap() throws Exception {
 		// creacion del primer observable
-		List<String>  usuariosList = Arrays.asList("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz", "Pepa Pig",
-				"Juan Mengano", "Tania Martín", "Carmen Barrero");
-		Flux<String> nombres = Flux.fromIterable(usuariosList); /*Flux.just("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz", "Pepa Pig",
-				"Juan Mengano", "Tania Martín", "Carmen Barrero");*/
+		List<String> usuariosList = Arrays.asList("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz",
+				"Pepa Pig", "Juan Mengano", "Tania Martín", "Carmen Barrero");
+
+		Flux.fromIterable(usuariosList)
+				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
+				.flatMap(usuario -> { //tipo filter
+					if(usuario.getNombre().equalsIgnoreCase("pepa")) {
+						return Mono.just(usuario);//como es un solo elemento devolvemos Mono -> devolvemos un observable, fusionandolo al mimso stream. REDUCE EL STREAM ACTUAL
+					} else {
+						return Mono.empty();
+					}
+				})
+				.map(usuario -> {
+					String nombre = usuario.getNombre().toLowerCase();
+					usuario.setNombre(nombre);
+					return usuario;
+				})
+				.subscribe(usuario -> log.info(usuario.toString()));// consume contenido del publiser.;
+	}
+
+	public void ejemploIterable() throws Exception {
+		// creacion del primer observable
+		List<String> usuariosList = Arrays.asList("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz",
+				"Pepa Pig", "Juan Mengano", "Tania Martín", "Carmen Barrero");
+
+		Flux<String> nombres = Flux.fromIterable(
+				usuariosList); /*
+								 * Flux.just("Alvaro Martín", "Reme Boza", "Jose Joaquin Martín", "Pepa Muñoz",
+								 * "Pepa Pig", "Juan Mengano", "Tania Martín", "Carmen Barrero");
+								 */
 
 		// separando la declaracion inicial del resto, se convierte en un flujo
 		// diferente
@@ -57,7 +88,7 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 		 * @Override public void run() {
 		 * log.info("Ha finalizado la ejecución del observable con éxito!"); } });//
 		 * consume contenido del publiser.
-		 */		
+		 */
 		log.info("FLUJO USUARIOS");
 		usuarios.subscribe(e -> log.info(e.toString()), error -> log.error(error.getMessage()), new Runnable() {
 
