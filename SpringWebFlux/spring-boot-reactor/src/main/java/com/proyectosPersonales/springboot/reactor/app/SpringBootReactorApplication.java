@@ -26,7 +26,28 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploFlatMap();
+		ejemploToString();
+	}
+	
+	public void ejemploToString() throws Exception {
+		// creacion del primer observable
+		List<Usuario> usuariosList = Arrays.asList(Usuario.builder().nombre("Álvaro").apellido("Martín").build(), Usuario.builder().nombre("Reme").apellido("Boza").build(),
+				Usuario.builder().nombre("José Joaquín").apellido("Martín").build(), Usuario.builder().nombre("Pepa").apellido("Muñoz").build(),
+				Usuario.builder().nombre("Pepa").apellido("Pig").build(), Usuario.builder().nombre("Juan").apellido("Mengano").build());
+
+		Flux.fromIterable(usuariosList)
+				.map(usuario -> usuario.getNombre().toUpperCase().concat(" ").concat(usuario.getApellido().toUpperCase()))
+				.flatMap(nombre -> { //tipo filter
+					if(nombre.contains("pepa".toUpperCase())) {
+						return Mono.just(nombre);//como es un solo elemento devolvemos Mono -> devolvemos un observable, fusionandolo al mimso stream. REDUCE EL STREAM ACTUAL
+					} else {
+						return Mono.empty();
+					}
+				})
+				.map(nombre -> {
+					return nombre.toLowerCase();
+				})
+				.subscribe(nombre -> log.info(nombre.toString()));// consume contenido del publiser.;
 	}
 
 	public void ejemploFlatMap() throws Exception {
