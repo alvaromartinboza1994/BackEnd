@@ -1,5 +1,6 @@
 package com.proyectosPersonales.springboot.reactor.app;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,28 @@ public class SpringBootReactorApplication implements CommandLineRunner { // para
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploZipWithRangos();
+		ejemploDelayElements();
+	}
+	
+	public void ejemploDelayElements() throws InterruptedException {//alternativa para retrasar hilos
+		Flux<Integer> rango = Flux.range(1, 12)
+				.delayElements(Duration.ofSeconds(1))
+				.doOnNext(i -> log.info(i.toString()));
+		
+		rango.blockLast();
+		
+		//rango.subscribe();
+		//Thread.sleep(13000);
+	}
+	
+	public void ejemploInterval() {//no se mostrara en el terminal. El flujo se sigue ejecutando en segundo plano, se sigue ejecutando en la maquina virtual de java. CARACTERISTICA DE PROGRAMACIÓN REACTIVA -> SE EJECUTAN EN DIFERENTES HILOS
+		Flux<Integer> rango = Flux.range(1, 12);
+		Flux<Long> retraso = Flux.interval(Duration.ofSeconds(1));
+		
+		rango.zipWith(retraso, (ra, re) -> ra)
+		.doOnNext(i -> log.info(i.toString()))
+		//.blockLast();//NO ES RECOMENDABLE, para ver el bloqueo que se produce ponemos blocklast en vez de subscribe
+		.subscribe();
 	}
 	
 	public void ejemploZipWithRangos() {
