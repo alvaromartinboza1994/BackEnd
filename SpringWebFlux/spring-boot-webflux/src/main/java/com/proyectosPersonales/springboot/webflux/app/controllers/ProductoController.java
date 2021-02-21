@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 
 import com.proyectosPersonales.springboot.webflux.app.models.documents.Producto;
@@ -13,23 +14,38 @@ import com.proyectosPersonales.springboot.webflux.app.models.services.ProductoSe
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Controller
 @Slf4j
-public class ProductoController {
+public class ProductoController {//NO USAMOS EL SUSCRIPTOR EN EL CONTROLADOR
 
 	@Autowired
 	private ProductoService service;
 
 	@GetMapping({ "/listar", "/" })
-	public String listar(Model model) {
+	public Mono<String> listar(Model model) {
 		Flux<Producto> productos = service.findAllConNombreUpperCase();
 		productos.subscribe(producto -> log.info(producto.getNombre()));
 
 		model.addAttribute("productos", productos);
 		model.addAttribute("titulo", "Listado de productos");
 
-		return "listar";
+		return Mono.just("listar");
+	}
+
+	@GetMapping("/form")
+	public Mono<String> crear(Model model) {//para rellenar mono producto en formulario
+		model.addAttribute("producto", new Producto());
+		model.addAttribute("titulo", "formulario de producto");
+		return Mono.just("form");
+	}
+	
+	@PostMapping("/form")
+	public Mono<String> guardar(Producto producto) {
+		return service.save(producto)
+				.doOnNext(p -> log.info("producto almacenado: " + p.getNombre() + " Id: " + p.getId()))
+				.thenReturn("redirect:/listar");
 	}
 
 	@GetMapping("/listar-datadriver")
@@ -38,26 +54,27 @@ public class ProductoController {
 
 		productos.subscribe(producto -> log.info(producto.getNombre()));
 
-		model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1)); //buffer se mide en cantidad de elementos
+		model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1)); // buffer se mide en
+																								// cantidad de elementos
 		model.addAttribute("titulo", "Listado de productos");
 
 		return "listar";
 	}
-	
-	@GetMapping({ "/listar-full"})
+
+	@GetMapping({ "/listar-full" })
 	public String listarFull(Model model) {
-		Flux<Producto> productos = service.findAllConNombreUpperCaseYConRepeat();//repetimos 5000 veces el flujo actual
-		
+		Flux<Producto> productos = service.findAllConNombreUpperCaseYConRepeat();// repetimos 5000 veces el flujo actual
+
 		model.addAttribute("productos", productos);
 		model.addAttribute("titulo", "Listado de productos");
 
 		return "listar";
 	}
-	
-	@GetMapping({ "/listar-chunked"})
+
+	@GetMapping({ "/listar-chunked" })
 	public String listarChunked(Model model) {
-		Flux<Producto> productos = service.findAllConNombreUpperCaseYConRepeat();//repetimos 5000 veces el flujo actual
-		
+		Flux<Producto> productos = service.findAllConNombreUpperCaseYConRepeat();// repetimos 5000 veces el flujo actual
+
 		model.addAttribute("productos", productos);
 		model.addAttribute("titulo", "Listado de productos");
 
