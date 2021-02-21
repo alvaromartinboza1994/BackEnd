@@ -44,9 +44,35 @@ public class ProductoController {
 
 		productos.subscribe(producto -> log.info(producto.getNombre()));
 
-		model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1));
+		model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1)); //buffer se mide en cantidad de elementos
 		model.addAttribute("titulo", "Listado de productos");
 
 		return "listar";
+	}
+	
+	@GetMapping({ "/listar-full"})
+	public String listarFull(Model model) {
+		Flux<Producto> productos = dao.findAll().map(producto -> {
+			producto.setNombre(producto.getNombre().toUpperCase());
+			return producto;
+		}).repeat(5000);//repetimos 5000 veces el flujo actual
+		
+		model.addAttribute("productos", productos);
+		model.addAttribute("titulo", "Listado de productos");
+
+		return "listar";
+	}
+	
+	@GetMapping({ "/listar-chunked"})
+	public String listarChunked(Model model) {
+		Flux<Producto> productos = dao.findAll().map(producto -> {
+			producto.setNombre(producto.getNombre().toUpperCase());
+			return producto;
+		}).repeat(5000);//repetimos 5000 veces el flujo actual
+		
+		model.addAttribute("productos", productos);
+		model.addAttribute("titulo", "Listado de productos");
+
+		return "listar-chunked";
 	}
 }
