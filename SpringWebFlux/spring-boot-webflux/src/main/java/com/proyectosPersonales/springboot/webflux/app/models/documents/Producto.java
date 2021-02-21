@@ -32,12 +32,12 @@ public class Producto {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createAt;
+	
+	private Categoria categoria;
+	
 	public Producto(String nombre, Double precio) {
-		super();
 		this.nombre = nombre;
 		this.precio = precio;
 	}
-	
-	
 	
 }
