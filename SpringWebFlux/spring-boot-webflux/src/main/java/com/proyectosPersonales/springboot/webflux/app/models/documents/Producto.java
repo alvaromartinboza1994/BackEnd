@@ -40,4 +40,9 @@ public class Producto {
 		this.precio = precio;
 	}
 	
+	public Producto(String nombre, Double precio, Categoria categoria) {
+		this(nombre, precio);
+		this.categoria = categoria;
+	}
+	
 }
