@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
 import com.proyectosPersonales.springboot.webflux.app.models.dao.ProductoDao;
 import com.proyectosPersonales.springboot.webflux.app.models.documents.Producto;
@@ -17,6 +18,9 @@ public class SpringBootWebfluxApplication implements CommandLineRunner {
 	
 	@Autowired
 	private ProductoDao dao;
+	
+	@Autowired
+	private ReactiveMongoTemplate mongoTemplate;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootWebfluxApplication.class, args);
@@ -24,6 +28,10 @@ public class SpringBootWebfluxApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		//SOLO PARA DESARROLLO
+		mongoTemplate.dropCollection("productos").subscribe();//para hacer drop de todos los productos actuales en bbdd al iniciar la aplicacion
+		
 		Flux.just(Producto.builder().nombre("TV plana").precio(100D).build(),
 				Producto.builder().nombre("Movil").precio(200D).build(),
 				Producto.builder().nombre("Vaso").precio(2D).build(),
