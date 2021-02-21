@@ -11,12 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 
+import com.proyectosPersonales.springboot.webflux.app.models.documents.Categoria;
 import com.proyectosPersonales.springboot.webflux.app.models.documents.Producto;
 import com.proyectosPersonales.springboot.webflux.app.models.services.ProductoService;
 
@@ -32,6 +34,11 @@ public class ProductoController {// NO USAMOS EL SUSCRIPTOR EN EL CONTROLADOR
 
 	@Autowired
 	private ProductoService service;
+
+	@ModelAttribute("categorias")
+	public Flux<Categoria> categorias() {
+		return service.findAllCategoria();
+	}
 
 	@GetMapping({ "/listar", "/" })
 	public Mono<String> listar(Model model) {
@@ -98,11 +105,14 @@ public class ProductoController {// NO USAMOS EL SUSCRIPTOR EN EL CONTROLADOR
 			return Mono.just("form");
 		} else {
 			status.setComplete();
-			if (producto.getCreateAt() == null) {
-				producto.setCreateAt(new Date());
-			}
-			return service.save(producto)
-					.doOnNext(p -> log.info("producto almacenado: " + p.getNombre() + " Id: " + p.getId()))
+			Mono<Categoria> categoria = service.findCategoriaById(producto.getCategoria().getId());
+			return categoria.flatMap(c -> {
+				if (producto.getCreateAt() == null) {
+					producto.setCreateAt(new Date());
+				}
+				producto.setCategoria(c);
+				return service.save(producto);
+			}).doOnNext(p -> log.info("producto almacenado: " + p.getNombre() + " Id: " + p.getId() + " Categoría: " + p.getCategoria().getNombre()))
 					.thenReturn("redirect:/listar?success=producto+guardado+con+exito");
 		}
 

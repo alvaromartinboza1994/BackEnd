@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
 import com.proyectosPersonales.springboot.webflux.app.models.documents.Categoria;
 import com.proyectosPersonales.springboot.webflux.app.models.documents.Producto;
-import com.proyectosPersonales.springboot.webflux.app.models.services.ProductoServiceImpl;
+import com.proyectosPersonales.springboot.webflux.app.models.services.ProductoService;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
@@ -20,7 +20,7 @@ import reactor.core.publisher.Flux;
 public class SpringBootWebfluxApplication implements CommandLineRunner {
 
 	@Autowired
-	private ProductoServiceImpl service;
+	private ProductoService service;
 
 	@Autowired
 	private ReactiveMongoTemplate mongoTemplate;
