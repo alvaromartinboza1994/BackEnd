@@ -1,6 +1,6 @@
 package com.proyectosPersonales.springboot.webflux.app.models.documents;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

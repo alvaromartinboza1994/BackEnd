@@ -1,5 +1,7 @@
 package com.proyectosPersonales.springboot.webflux.app;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -37,7 +39,10 @@ public class SpringBootWebfluxApplication implements CommandLineRunner {
 				Producto.builder().nombre("Vaso").precio(2D).build(),
 				Producto.builder().nombre("Mesa").precio(275D).build(),
 				Producto.builder().nombre("Microhondas").precio(210D).build())
-		.flatMap(producto ->  dao.save(producto))//hace lo mismo que map pero este esta preparado para trabajar con flux y mono
+		.flatMap(producto ->  {
+			producto.setCreateAt(new Date());
+			return dao.save(producto);
+		})//hace lo mismo que map pero este esta preparado para trabajar con flux y mono
 		.subscribe(producto -> log.info("Insert: " + producto.getId() + " " + producto.getNombre()));
 
 	}
