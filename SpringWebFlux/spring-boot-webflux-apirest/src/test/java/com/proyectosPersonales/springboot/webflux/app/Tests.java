@@ -109,5 +109,27 @@ public class Tests {
 			Assertions.assertThat(p.getCategoria().getNombre()).isEqualTo("Muebles");
 		});
 	}
+	
+	@Test
+	public void editarTest() {
+		Producto producto = service.findByNombre("Sony Camara HD Digital").block();
+		Categoria categoria = service.findCategoriaByNombre("Muebles").block();
+		
+		Producto productoEditado = Producto.builder().nombre("mesa").precio(100.00).categoria(categoria).build();
+		
+		client.put()
+		.uri("/api/v2/productos/{id}", Collections.singletonMap("id", producto.getId()))
+		.contentType(MediaType.APPLICATION_JSON_UTF8)//del request con el cual enviamos el json para crear el flujo
+		.accept(MediaType.APPLICATION_JSON_UTF8)//lo que esperamos, response
+		.body(Mono.just(productoEditado), Producto.class)
+		.exchange()
+		.expectStatus().isCreated()
+		.expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+		.expectBody()
+		.jsonPath("$.id").isNotEmpty()
+		.jsonPath("$.nombre").isEqualTo("mesa")
+		.jsonPath("$.categoria.nombre").isEqualTo("Muebles");
+		
+	}
 
 }
