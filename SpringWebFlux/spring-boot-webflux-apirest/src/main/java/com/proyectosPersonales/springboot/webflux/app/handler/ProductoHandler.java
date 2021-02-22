@@ -29,23 +29,18 @@ public class ProductoHandler {
 	@Value("${config.uploads.path}")
 	private String path;
 
-	public Mono<ServerResponse> upload(ServerRequest request) {
-		String id = request.pathVariable("id");
-		return request.multipartData()
-				.map(multipart -> multipart.toSingleValueMap().get("file"))
-				.cast(FilePart.class)
-				.flatMap(filepart -> service.findById(id)
-						.flatMap(p -> {
-					p.setFoto(UUID.randomUUID().toString() + "-" + file.filename()
-					.replace(" ", "-")
-					.replace(":", "")
-					.replace("\\", ""));
-					return file.transferTo(new File(path + p.getFoto())).then(service.save(p));
-				})).flatmap(p -> ServerResponse.created(URI.create("/api/v2/productos".concat(p.getId())))
-						.contentType(MediaType.APPLICATION_JSON_UTF8)
-						.body(fromObject(p)))
-				.switchIfEmpty(ServerResponse.notFound().build());
-	}
+	/*
+	 * public Mono<ServerResponse> upload(ServerRequest request) { String id =
+	 * request.pathVariable("id"); return request.multipartData() .map(multipart ->
+	 * multipart.toSingleValueMap().get("file")) .cast(FilePart.class)
+	 * .flatMap(filepart -> service.findById(id) .flatMap(p -> {
+	 * p.setFoto(UUID.randomUUID().toString() + "-" + file.filename() .replace(" ",
+	 * "-") .replace(":", "") .replace("\\", "")); return file.transferTo(new
+	 * File(path + p.getFoto())).then(service.save(p)); })).flatmap(p ->
+	 * ServerResponse.created(URI.create("/api/v2/productos".concat(p.getId())))
+	 * .contentType(MediaType.APPLICATION_JSON_UTF8) .body(fromObject(p)))
+	 * .switchIfEmpty(ServerResponse.notFound().build()); }
+	 */
 
 	public Mono<ServerResponse> listar(ServerRequest request) {
 		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(service.findAll(), Producto.class);
