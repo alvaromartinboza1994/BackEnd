@@ -1,6 +1,9 @@
 package com.proyectosPersonales.springboot.webflux.app.controllers;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Date;
 import java.util.UUID;
@@ -9,11 +12,14 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,6 +69,16 @@ public class ProductoController {// NO USAMOS EL SUSCRIPTOR EN EL CONTROLADOR
 					return Mono.just(p);
 				}).then(Mono.just("ver"))
 				.onErrorResume(ex -> Mono.just("redirect:/listar?error=no+existe+el+producto"));
+	}
+	
+	@GetMapping("/uploads/img/{nombreFoto:.+}")
+	public Mono<ResponseEntity<Resource>> verFoto(@PathVariable String nombreFoto) throws MalformedURLException {
+		Path ruta = Paths.get(path).resolve(nombreFoto).toAbsolutePath();
+		Resource imagen = new UrlResource(ruta.toUri());
+		return Mono.just(
+				ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + imagen.getFilename() + "\"")
+				.body(imagen)
+				);
 	}
 
 	@GetMapping({ "/listar", "/" })
