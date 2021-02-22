@@ -70,4 +70,12 @@ public class ProductoHandler {
 				.contentType(MediaType.APPLICATION_JSON_UTF8).body(service.save(p), Producto.class))
 				.switchIfEmpty(ServerResponse.notFound().build());
 	}
+	
+	public Mono<ServerResponse> eliminar(ServerRequest request) {
+		String id = request.pathVariable("id");
+		Mono<Producto> productoDb = service.findById(id);
+		
+		return productoDb.flatMap(p -> service.delete(p).then(ServerResponse.noContent().build()))
+				.switchIfEmpty(ServerResponse.notFound().build());
+	}
 }
