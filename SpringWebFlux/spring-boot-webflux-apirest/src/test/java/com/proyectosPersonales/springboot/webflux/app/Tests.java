@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-
+import com.proyectosPersonales.springboot.webflux.app.models.documents.Categoria;
 import com.proyectosPersonales.springboot.webflux.app.models.documents.Producto;
 import com.proyectosPersonales.springboot.webflux.app.models.service.ProductoService;
 
@@ -71,6 +71,43 @@ public class Tests {
 		/*.expectBody()
 		.jsonPath("$.id").isNotEmpty()
 		.jsonPath("$.nombre").isEqualTo("Sony Camara HD Digital");*/
+	}
+	
+	@Test
+	public void crearTest() {
+		Categoria categoria = service.findCategoriaByNombre("Muebles").block();
+		Producto producto = Producto.builder().nombre("mesa").precio(100.00).categoria(categoria).build();
+		client.post().uri("/api/v2/productos")
+		.contentType(MediaType.APPLICATION_JSON_UTF8)//del request con el cual enviamos el json para crear el flujo
+		.accept(MediaType.APPLICATION_JSON_UTF8)//lo que esperamos, response
+		.body(Mono.just(producto), Producto.class)
+		.exchange()
+		.expectStatus().isCreated()
+		.expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+		.expectBody()
+		.jsonPath("$.id").isNotEmpty()
+		.jsonPath("$.nombre").isEqualTo("mesa")
+		.jsonPath("$.categoria.nombre").isEqualTo("Muebles");
+	}
+	
+	@Test
+	public void crear2Test() {
+		Categoria categoria = service.findCategoriaByNombre("Muebles").block();
+		Producto producto = Producto.builder().nombre("mesa").precio(100.00).categoria(categoria).build();
+		client.post().uri("/api/v2/productos")
+		.contentType(MediaType.APPLICATION_JSON_UTF8)//del request con el cual enviamos el json para crear el flujo
+		.accept(MediaType.APPLICATION_JSON_UTF8)//lo que esperamos, response
+		.body(Mono.just(producto), Producto.class)
+		.exchange()
+		.expectStatus().isCreated()
+		.expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+		.expectBody(Producto.class)
+		.consumeWith(response -> {
+			Producto p = response.getResponseBody();
+			Assertions.assertThat(p.getId()).isNotEmpty();
+			Assertions.assertThat(p.getNombre()).isEqualTo("mesa");
+			Assertions.assertThat(p.getCategoria().getNombre()).isEqualTo("Muebles");
+		});
 	}
 
 }
