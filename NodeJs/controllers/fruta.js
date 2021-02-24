@@ -70,7 +70,7 @@ function getFruta(req, res){
 				message: 'Error en el servidor'
 			});
 		} else {
-			if(frutas) {
+			if(fruta) {
 				res.status(200).send({
 					fruta
 				});
@@ -93,7 +93,7 @@ function updateFruta(req, res) {
 				message: 'Error en el servidor'
 			});
 		} else {
-			if(frutas) {
+			if(frutaUpdated) {
 				res.status(200).send({
 					fruta: frutaUpdated
 				});
@@ -106,10 +106,32 @@ function updateFruta(req, res) {
 	});
 }
 
+function deleteFruta(req, res) {
+	var frutaId = req.params.id;
+	Fruta.findByIdAndRemove(frutaId, (err, frutaRemoved) => {
+		if(err) {
+			res.status(500).send({
+				message: 'Error en el servidor'
+			});
+		} else {
+			if(frutaRemoved) {
+				res.status(200).send({
+					fruta: frutaRemoved
+				});
+			} else {
+				res.status(404).send({
+					message: 'No existe la fruta'
+				});
+			}
+		}
+	})
+}
+
 module.exports = {
 	pruebas,
 	saveFruta,
 	getFrutas,
 	getFruta,
-	updateFruta
+	updateFruta,
+	deleteFruta
 };
