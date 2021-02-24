@@ -6,5 +6,7 @@ var FrutaController = require('../controllers/fruta');
 var api = express.Router(); //nos permite crear rutas y pasar parametros
 
 api.get('/pruebas', FrutaController.pruebas);
+api.post('/fruta', FrutaController.saveFruta);
+api.get('/frutas', FrutaController.getFrutas);
 
 module.exports = api;
