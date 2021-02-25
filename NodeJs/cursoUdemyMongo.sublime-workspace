@@ -3,10 +3,78 @@
 	{
 		"selected_items":
 		[
+			[
+				"find",
+				"findByIdAndUpdate"
+			],
+			[
+				"frta",
+				"frutaId"
+			],
+			[
+				"fruta",
+				"frutaUpdated"
+			],
+			[
+				"get",
+				"getFrutas"
+			],
+			[
+				"save",
+				"saveFruta"
+			],
+			[
+				"Fruta",
+				"FruatSchema"
+			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"contents": "'use strict'\n\nvar mongoose = require('mongoose');\nvar app = require('./app');\nvar port = 3800;\n\nmongoose.Promise = global.Promise;\nmongoose.connect('mongodb://localhost:27017/curse_mongo', {useMongoClient: true})\n\t.then(() => {\n\t\tconsole.log('La conexión a MongoDB se ha realizado correctamente.');\n\t\tapp.listen(port, () => {\n\t\t\tconsole.log('El servidor está corriendo en localhost:3800');\n\t\t});\n\t})\n\t.catch(err => console.log(err));",
+			"file": "index.js",
+			"file_size": 449,
+			"file_write_time": 132586359149824232,
+			"settings":
+			{
+				"buffer_size": 433,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "'use strict'\n\nvar mongoose = require('mongoose');\nvar Schema = mongoose.Schema;\n\nvar FruatSchema = Schema({\n\tnombre: String,\n\tcolor: String,\n\ttemporada: Boolean\n});\n\nmodule.exports = mongoose.model('Fruta', FruatSchema);",
+			"file": "models/fruta.js",
+			"file_size": 231,
+			"file_write_time": 132586359135361264,
+			"settings":
+			{
+				"buffer_size": 220,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "'use strict'\n\nvar Fruta = require('../models/fruta');\n\nfunction pruebas (req, res) {\n\tres.status(200).send({\n\t\tmessage: 'Esta ruta es de prueba en mi api restful con mongo y node'\n\t});\n}\n\nfunction saveFruta(req, res) {\n\tvar fruta = new Fruta();\n\n\tvar params = req.body;\n\n\tif(params.nombre) {\n\t\tfruta.nombre = params.nombre;\n\t\tfruta.color = params.color;\n\t\tfruta.temporada = params.temporada;\n\n\t\tfruta.save((err, frutaStored) => {\n\t\t\tif(err) {\n\t\t\t\tres.status(500).send({\n\t\t\t\t\tmessage: 'Error en el servidor'\n\t\t\t\t});\n\t\t\t} else {\n\t\t\t\tif(frutaStored){\n\t\t\t\t\tres.status(200).send({\n\t\t\t\t\t\tfruta: frutaStored\n\t\t\t\t\t});\n\t\t\t\t} else {\n\t\t\t\t\tres.status(200).send({\n\t\t\t\t\t\tmessage: 'No se ha guardado la fruta'\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t} else {\n\t\t\tres.status(200).send({\n\t\t\t\t\tmessage: 'El nombre de la fruat es obligatorio'\n\t\t\t\t});\n\t\t}\n}\n\nfunction getFrutas(req, res){\n\tFruta.find({}).sort({'_id':-1}).exec((err, frutas) => {\n\t\tif(err) {\n\t\t\tres.status(500).send({\n\t\t\t\tmessage: 'Error en el servidor'\n\t\t\t});\n\t\t} else {\n\t\t\tif(frutas) {\n\t\t\t\tres.status(200).send({\n\t\t\t\t\tfrutas\n\t\t\t\t});\n\t\t\t} else {\n\t\t\t\tres.status(404).send({\n\t\t\t\t\tmessage: 'No hay frutas'\n\t\t\t\t});\n\t\t\t}\n\t\t}\n\t});\n}\n\nfunction getFruta(req, res){\n\tvar frutaId = req.params.id;\n\tFruta.findById(frutaId).exec((err, fruta) => {\n\tif(err) {\n\t\t\tres.status(500).send({\n\t\t\t\tmessage: 'Error en el servidor'\n\t\t\t});\n\t\t} else {\n\t\t\tif(fruta) {\n\t\t\t\tres.status(200).send({\n\t\t\t\t\tfruta\n\t\t\t\t});\n\t\t\t} else {\n\t\t\t\tres.status(404).send({\n\t\t\t\t\tmessage: 'No existe la fruta'\n\t\t\t\t});\n\t\t\t}\n\t\t}\n\t});\n}\n\nfunction updateFruta(req, res) {\n\tvar frutaId = req.params.id;\n\tvar update = req.body;\n\n\tFruta.findByIdAndUpdate(frutaId, update, {new:true}, (err, frutaUpdated) => {\n\t\tif(err) {\n\t\t\tres.status(500).send({\n\t\t\t\tmessage: 'Error en el servidor'\n\t\t\t});\n\t\t} else {\n\t\t\tif(frutaUpdated) {\n\t\t\t\tres.status(200).send({\n\t\t\t\t\tfruta: frutaUpdated\n\t\t\t\t});\n\t\t\t} else {\n\t\t\t\tres.status(404).send({\n\t\t\t\t\tmessage: 'No existe la fruta'\n\t\t\t\t});\n\t\t\t}\n\t\t}\n\t});\n}\n\nfunction deleteFruta(req, res) {\n\tvar frutaId = req.params.id;\n\tFruta.findByIdAndRemove(frutaId, (err, frutaRemoved) => {\n\t\tif(err) {\n\t\t\tres.status(500).send({\n\t\t\t\tmessage: 'Error en el servidor'\n\t\t\t});\n\t\t} else {\n\t\t\tif(frutaRemoved) {\n\t\t\t\tres.status(200).send({\n\t\t\t\t\tfruta: frutaRemoved\n\t\t\t\t});\n\t\t\t} else {\n\t\t\t\tres.status(404).send({\n\t\t\t\t\tmessage: 'No existe la fruta'\n\t\t\t\t});\n\t\t\t}\n\t\t}\n\t})\n}\n\nmodule.exports = {\n\tpruebas,\n\tsaveFruta,\n\tgetFrutas,\n\tgetFruta,\n\tupdateFruta,\n\tdeleteFruta\n};",
+			"file": "controllers/fruta.js",
+			"file_size": 2582,
+			"file_write_time": 132586368083433077,
+			"settings":
+			{
+				"buffer_size": 2446,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "routes/fruta.js",
+			"settings":
+			{
+				"buffer_size": 496,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -44,6 +112,10 @@
 	],
 	"file_history":
 	[
+		"/C/Users/alvmartin/Desktop/GitHub/BackEnd/NodeJs/app.js",
+		"/C/Users/alvmartin/Desktop/GitHub/BackEnd/NodeJs/models",
+		"/C/Users/alvmartin/Desktop/GitHub/BackEnd/NodeJs/package.json",
+		"/C/Users/alvmartin/Desktop/GitHub/BackEnd/NodeJs/package-lock.json"
 	],
 	"find":
 	{
@@ -78,8 +150,123 @@
 	"groups":
 	[
 		{
+			"selected": 3,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 433,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								317,
+								317
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "models/fruta.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 220,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								220,
+								220
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "controllers/fruta.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2446,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1979,
+								1968
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1827.2,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "routes/fruta.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 496,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								471,
+								471
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -89,7 +276,7 @@
 	},
 	"input":
 	{
-		"height": 0.0
+		"height": 40.0
 	},
 	"layout":
 	{
@@ -160,7 +347,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 150.0,
+	"side_bar_width": 143.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
