@@ -20,6 +20,11 @@ public class PersonaServiceImpl implements PersonaService {
 	}
 
 	@Override
+	public PersonaDTO buscarPorNombreYApellidos(String nombre, String apellidos) {
+		return personaDao.findByNombreAndApellidos(nombre, apellidos);
+	}
+
+	@Override
 	public PersonaDTO buscarPorNombre(String nombre) {
 		return personaDao.findByNombre(nombre);
 	}

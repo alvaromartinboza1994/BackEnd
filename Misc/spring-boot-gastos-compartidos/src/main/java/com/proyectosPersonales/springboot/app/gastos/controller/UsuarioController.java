@@ -9,23 +9,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.PersonaDTO;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioDTO;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PersonaService;
+import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
 
 @RestController
-@RequestMapping("persona")
-public class PersonaController {
+@RequestMapping("usuario")
+public class UsuarioController {
 
+	@Autowired
+	private UsuarioService usuarioService;
+	
 	@Autowired
 	private PersonaService personaService;
 
-	@PostMapping("/guardarPersona")
-	public void guardarPersona(@RequestBody PersonaDTO persona) {
-		personaService.guardarPersona(persona);
+	@PostMapping("/guardarUsuario")
+	public void guardarPersona(@RequestBody UsuarioDTO usuario) {
+		usuarioService.guardarUsuario(usuario);
 	}
 
-	@GetMapping("/buscarPersonaPorNombre/{nombre}")
-	public PersonaDTO buscarPersonaPorNombre(@PathVariable String nombre) {
-		return personaService.buscarPorNombre(nombre);
+	@GetMapping("/buscarUsuario")
+	public PersonaDTO buscarPersonaPorNombre(@RequestBody PersonaDTO persona) {
+		PersonaDTO persona_db = personaService.buscarPorNombreYApellidos(persona.getNombre(), persona.getApellidos());
+		return usuarioService.buscarPorId(persona_db.getIdPersona());
 	}
 
 }

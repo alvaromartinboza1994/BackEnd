@@ -13,14 +13,14 @@ public class UsuarioServiceImpl implements UsuarioService{
 	private UsuarioDaoI usuarioDao;
 
 	@Override
-	public PersonaDTO buscarPorNombre(String nombre) {
-		return usuarioDao.findByNombre(nombre);
-	}
-
-	@Override
 	public void guardarUsuario(UsuarioDTO usuario) {
 		usuarioDao.save(usuario);
 		
+	}
+
+	@Override
+	public UsuarioDTO buscarPorId(Integer id) {
+		return usuarioDao.findById(id).get();
 	}
 
 }

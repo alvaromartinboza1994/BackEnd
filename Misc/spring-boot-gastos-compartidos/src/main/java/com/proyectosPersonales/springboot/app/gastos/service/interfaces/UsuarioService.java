@@ -5,7 +5,7 @@ import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioDTO;
 
 public interface UsuarioService {
 	
-	PersonaDTO buscarPorNombre(String nombre);
+	UsuarioDTO buscarPorId(Integer id);
 	
 	void guardarUsuario(UsuarioDTO usuario);
 

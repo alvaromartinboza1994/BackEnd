@@ -25,9 +25,9 @@ CREATE TABLE autentia.pago (
 
 CREATE TABLE autentia.usuario (
   `idUsuario` INT NOT NULL,
-  `amigos` INT NOT NULL, 
-  `pagosRealizados` INT NOT NULL,
-  `deudas` INT NOT NULL,
+  `amigos` INT DEFAULT NULL, 
+  `pagosRealizados` INT DEFAULT NULL,
+  `deudas` INT DEFAULT NULL,
   KEY `idUsuario` (`idUsuario`),
   FOREIGN KEY (`idUsuario`) REFERENCES `persona`(`idPersona`),
   FOREIGN KEY (`amigos`) REFERENCES `amigo`(`idAmigo`),

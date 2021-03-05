@@ -13,7 +13,7 @@ import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PersonaS
 
 @RestController
 @RequestMapping("persona")
-public class PersonaController {
+public class AmigoController {
 
 	@Autowired
 	private PersonaService personaService;
