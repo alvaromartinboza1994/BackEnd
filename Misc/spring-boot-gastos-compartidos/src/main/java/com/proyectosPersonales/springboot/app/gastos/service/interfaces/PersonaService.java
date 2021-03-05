@@ -1,10 +1,10 @@
-package com.proyectosPersonales.springboot.app.gastos.service;
+package com.proyectosPersonales.springboot.app.gastos.service.interfaces;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.PersonaDTO;
 
 public interface PersonaService {
 	
-	PersonaDTO buscarPersonaPorNombre(String nombre);
+	PersonaDTO buscarPorNombre(String nombre);
 	
 	void guardarPersona(PersonaDTO persona);
 

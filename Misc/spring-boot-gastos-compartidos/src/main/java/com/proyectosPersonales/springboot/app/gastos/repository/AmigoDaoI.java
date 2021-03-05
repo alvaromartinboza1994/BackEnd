@@ -6,5 +6,7 @@ import com.proyectosPersonales.springboot.app.gastos.dto.AmigoDTO;
 import com.proyectosPersonales.springboot.app.gastos.dto.PersonaDTO;
 
 public interface AmigoDaoI extends CrudRepository<AmigoDTO, Integer>{
+	
+	public PersonaDTO findByNombre(String nombre);
 
 }

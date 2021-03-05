@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.PersonaDTO;
-import com.proyectosPersonales.springboot.app.gastos.service.PersonaService;
+import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PersonaService;
 
 @RestController
 @RequestMapping("persona")

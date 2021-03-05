@@ -1,4 +1,4 @@
-package com.proyectosPersonales.springboot.app.gastos.service;
+package com.proyectosPersonales.springboot.app.gastos.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.PersonaDTO;
 import com.proyectosPersonales.springboot.app.gastos.repository.PersonaDaoI;
+import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PersonaService;
 
 @Service
 public class PersonaServiceImpl implements PersonaService {
@@ -19,7 +20,7 @@ public class PersonaServiceImpl implements PersonaService {
 	}
 
 	@Override
-	public PersonaDTO buscarPersonaPorNombre(String nombre) {
+	public PersonaDTO buscarPorNombre(String nombre) {
 		return personaDao.findByNombre(nombre);
 	}
 
