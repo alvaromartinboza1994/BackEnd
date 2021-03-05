@@ -2,6 +2,7 @@ package com.proyectosPersonales.springboot.app.gastos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +23,9 @@ public class PersonaController {
 		personaService.guardarPersona(persona);
 	}
 
-	@GetMapping("/buscarPersonaPorId")
-	public PersonaDTO guardarPersona(@RequestBody Integer id) {
-		return personaService.buscarPersonaPorId(id);
+	@GetMapping("/buscarPersonaPorNombre/{nombre}")
+	public PersonaDTO buscarPersonaPorNombre(@PathVariable String nombre) {
+		return personaService.buscarPersonaPorNombre(nombre);
 	}
 
 }

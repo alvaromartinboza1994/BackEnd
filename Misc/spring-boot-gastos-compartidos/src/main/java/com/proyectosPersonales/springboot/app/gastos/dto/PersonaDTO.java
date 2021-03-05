@@ -20,18 +20,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "Persona")
-@NamedQuery(name = "Persona", query = "SELECT p FROM Persona p")
 public class PersonaDTO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Integer idPersona;
 
 	private String nombre;
 
 	private String apellidos;
 
-	private List<AmigoDTO> listaAmigos;
+	//private List<AmigoDTO> listaAmigos;
 
 	public PersonaDTO(String nombre, String apellidos) {
 		this.nombre = nombre;
