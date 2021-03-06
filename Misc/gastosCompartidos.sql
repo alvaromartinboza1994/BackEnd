@@ -1,4 +1,4 @@
-CREATE TABLE autentia.persona (
+personaCREATE TABLE autentia.persona (
   `idPersona` INT NOT NULL AUTO_INCREMENT,
   `nombre` varchar (20) NOT NULL,
   `apellidos` varchar (20) NOT NULL,
@@ -36,4 +36,4 @@ CREATE TABLE autentia.usuario (
 );
 
 SELECT *
-FROM autentia.persona;
+FROM autentia.usuario;

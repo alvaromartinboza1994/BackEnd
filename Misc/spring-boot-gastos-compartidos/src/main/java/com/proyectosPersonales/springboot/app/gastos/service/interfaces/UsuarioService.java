@@ -1,12 +1,12 @@
 package com.proyectosPersonales.springboot.app.gastos.service.interfaces;
 
-import com.proyectosPersonales.springboot.app.gastos.dto.PersonaDTO;
-import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioDTO;
+import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
 
 public interface UsuarioService {
 	
-	UsuarioDTO buscarPorId(Integer id);
-	
-	void guardarUsuario(UsuarioDTO usuario);
+	  Usuario buscarPorNombreYApellidos(String nombre, String apellidos);
+	  
+	  void guardarUsuario(Usuario usuario);
+	 
 
 }
