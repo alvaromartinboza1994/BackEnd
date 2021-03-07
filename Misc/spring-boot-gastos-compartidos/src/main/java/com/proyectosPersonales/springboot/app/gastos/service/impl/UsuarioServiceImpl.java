@@ -1,15 +1,11 @@
 package com.proyectosPersonales.springboot.app.gastos.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.proyectosPersonales.springboot.app.gastos.dto.Pago;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
-import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;
 import com.proyectosPersonales.springboot.app.gastos.repository.UsuarioDaoI;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
 

@@ -21,10 +21,13 @@ public class AmigoServiceImpl implements AmigoService {
 
 	@Override
 	public void añadirUsuarioAmigo(UsuarioAmigo usuarioAmigo) {
-		Usuario usuario = usuarioService.buscarPorNombreYApellidos(usuarioAmigo.getUsuario().getNombre(),
-				usuarioAmigo.getUsuario().getApellidos());
-		usuario.getMisAmigos().add(usuarioAmigo.getAmigo());
-		usuarioDao.save(usuario);
-
+		Usuario amigo = usuarioService.buscarPorNombreYApellidos(usuarioAmigo.getAmigo().getNombre(),
+				usuarioAmigo.getAmigo().getApellidos());
+		if(amigo != null) {
+			Usuario usuario = usuarioService.buscarPorNombreYApellidos(usuarioAmigo.getUsuario().getNombre(),
+					usuarioAmigo.getUsuario().getApellidos());
+			usuario.getMisAmigos().add(usuarioAmigo.getAmigo());
+			usuarioDao.save(usuario);
+		}
 	}
 }
