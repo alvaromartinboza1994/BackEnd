@@ -2,9 +2,20 @@
 package com.proyectosPersonales.springboot.app.gastos.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,37 +27,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Usuario implements Serializable {
+public class Usuario {
 
-	private static final long serialVersionUID = -6191704983287394829L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "idUsuario")
+	private Integer idUsuario;
 
-	@EmbeddedId
-	private UsuarioPk id;
+	@Column(name = "nombre")
+	private String nombre;
 
-	/*
-	 * @Nullable
-	 * 
-	 * @OneToMany(mappedBy = "idAmigo")
-	 * 
-	 * @Column(name = "misAmigos") private List<Amigo> listaAmigos;
-	 * 
-	 * @Nullable
-	 * 
-	 * @OneToMany(mappedBy = "pagador", fetch = FetchType.LAZY, cascade =
-	 * CascadeType.ALL)
-	 * 
-	 * @Column(name = "misPagos") private List<Pago> misPagos;
-	 * 
-	 * @Nullable
-	 * 
-	 * @ManyToMany(cascade = { CascadeType.ALL })
-	 * 
-	 * @JoinTable(name = "Usuario_Pagos", joinColumns = { @JoinColumn(name =
-	 * "idUsuario"), @JoinColumn(name = "nombre"), @JoinColumn(name = "apellidos")
-	 * }, inverseJoinColumns = { @JoinColumn(name = "idPago") })
-	 * 
-	 * @Column(name = "misDeudas") private List<Pago> misDeudas;
-	 */
+	@Column(name = "apellidos")
+	private String apellidos;
 
-	
+	//@OneToMany(mappedBy = "idAmigo")
+	//@Column(name = "misAmigos")
+	//private List<Amigo> listaAmigos;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "idUsuario")
+	private List<Pago> misPagos;
+
+	//@ManyToMany(mappedBy = "deudores")
+	//private List<Pago> misDeudas;
+
 }

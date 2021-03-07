@@ -7,14 +7,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.proyectosPersonales.springboot.app.gastos.dto.Pago;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
-import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPk;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("usuario")
+@Slf4j
 public class UsuarioController {
 
 	@Autowired
@@ -26,7 +28,7 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/buscarUsuario")
-	public Usuario buscarPersonaPorNombre(@RequestBody UsuarioPk usuario) {
+	public Usuario buscarUsuario(@RequestBody Usuario usuario) {
 		return usuarioService.buscarPorNombreYApellidos(usuario.getNombre(), usuario.getApellidos());
 	}
 
