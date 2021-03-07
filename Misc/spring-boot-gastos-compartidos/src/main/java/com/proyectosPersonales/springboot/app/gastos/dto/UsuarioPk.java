@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import lombok.Data;
 
@@ -19,6 +20,9 @@ public class UsuarioPk implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idUsuario")
 	private Integer idUsuario;
+	
+	@Column(name = "codUsuario")
+	private String codUsuario;
 
 	@Column(name = "nombre")
 	private String nombre;

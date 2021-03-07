@@ -1,12 +1,22 @@
 package com.proyectosPersonales.springboot.app.gastos.dto;
 
+import java.util.Calendar;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class UsuarioPago {
 	
-	private Usuario usuario;
+	private String codUsuario;
 	
-	private Pago pago;
+	private Long importe; 
+
+	private String descripcion;
+	
+	private Calendar fecha;
 
 }

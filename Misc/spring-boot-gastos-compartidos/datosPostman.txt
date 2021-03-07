@@ -1,0 +1,32 @@
+//Registrar Usuario
+{
+    "codUsuario": "fraBuyo",
+    "nombre": "Francisco",
+    "apellidos": "Buyo"
+}
+
+{
+    "codUsuario": "alfPerez",
+    "nombre": "Alfonso",
+    "apellidos": "Perez"
+}
+
+{
+    "codUsuario": "rauGonzalez",
+    "nombre": "Raúl",
+    "apellidos": "González"
+}
+
+{
+    "codUsuario": "josGutierrez",
+    "nombre": "Jose María",
+    "apellidos": "Gutiérrez"
+}
+
+//Añadir Pago
+{
+    "importe": 100.00,
+    "descripcion": "Cena",
+    "fecha": "2021-03-01T20:00:00.000Z",
+    "codUsuario": "fraBuyo"
+}
