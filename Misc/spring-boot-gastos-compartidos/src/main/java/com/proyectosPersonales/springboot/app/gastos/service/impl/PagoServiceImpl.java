@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Balance;
 import com.proyectosPersonales.springboot.app.gastos.dto.Deuda;
+import com.proyectosPersonales.springboot.app.gastos.dto.Grupo;
 import com.proyectosPersonales.springboot.app.gastos.dto.Pago;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;
@@ -35,6 +36,7 @@ public class PagoServiceImpl implements PagoService {
 					.descripcion(usuarioPago.getDescripcion())
 					.fecha(usuarioPago.getFecha())
 					.build());
+			Grupo m
 			usuario_db.getMisAmigos().forEach(amigo -> {
 				Usuario amigo_db = usuarioService.buscarPorCodUsuario(amigo.getCodAmigo());
 				if(amigo_db != null) {

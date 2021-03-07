@@ -2,26 +2,37 @@
 package com.proyectosPersonales.springboot.app.gastos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioAmigo;
-import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;
-import com.proyectosPersonales.springboot.app.gastos.service.interfaces.AmigoService;
-import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PagoService;
+import com.proyectosPersonales.springboot.app.gastos.dto.Grupo;
+import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
+import com.proyectosPersonales.springboot.app.gastos.service.interfaces.GrupoService;
 
 @RestController
-@RequestMapping("amigo")
+@RequestMapping("grupo")
 public class GrupoController {
 
 	@Autowired
-	private AmigoService amigoService;
+	private GrupoService grupoService;
 	
-	@PostMapping("/anadirAmigo")
-	public void añadirPago(@RequestBody UsuarioAmigo usuarioAmigo) {
-		amigoService.añadirUsuarioAmigo(usuarioAmigo);
+	@PostMapping("/crearGrupo/{nombre}/usuario/{codUsuario}")
+	public void crearGrupo(@PathVariable String nombre, @PathVariable String codUsuario) {
+		grupoService.crearGrupo(nombre, codUsuario);
+	}
+	
+	@PostMapping("/anadirParticipante/{nombreGrupo}/usuario/{codUsuario}")
+	public void añadirParticipante(@PathVariable String nombreGrupo, @PathVariable String codUsuario) {
+		grupoService.añadirParticipante(nombreGrupo, codUsuario);
+	}
+	
+	@GetMapping("/consultarGrupo/{nombreGrupo}")
+	public Grupo consultarGrupo(@PathVariable String nombreGrupo) {
+		return grupoService.buscarGrupo(nombreGrupo);
 	}
 
 }

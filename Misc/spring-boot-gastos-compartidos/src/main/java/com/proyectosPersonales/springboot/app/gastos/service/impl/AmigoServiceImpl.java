@@ -9,6 +9,7 @@ import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioAmigo;
 import com.proyectosPersonales.springboot.app.gastos.repository.UsuarioDaoI;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.AmigoService;
+import com.proyectosPersonales.springboot.app.gastos.service.interfaces.GrupoService;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
 
 @Service
@@ -16,9 +17,9 @@ public class AmigoServiceImpl implements AmigoService {
 
 	@Autowired
 	UsuarioService usuarioService;
-
+	
 	@Autowired
-	private UsuarioDaoI usuarioDao;
+	GrupoService grupoService;
 
 	@Override
 	public void añadirUsuarioAmigo(UsuarioAmigo usuarioAmigo) {
@@ -30,8 +31,8 @@ public class AmigoServiceImpl implements AmigoService {
 				amigo_db.getMisAmigos().add(Amigo.builder()
 						.codAmigo(usuario_db.getCodUsuario())
 						.build());
-				usuarioDao.save(usuario_db);
-				usuarioDao.save(amigo_db);
+				usuarioService.guardarUsuario(usuario_db);
+				usuarioService.guardarUsuario(amigo_db);
 			}
 		}
 	}

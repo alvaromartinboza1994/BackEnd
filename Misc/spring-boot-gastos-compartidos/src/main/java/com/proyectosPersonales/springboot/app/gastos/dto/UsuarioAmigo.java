@@ -8,5 +8,7 @@ public class UsuarioAmigo {
 	private Usuario usuario;
 	
 	private Amigo amigo;
+	
+	private String nombreGrupo;
 
 }
