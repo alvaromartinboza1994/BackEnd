@@ -3,11 +3,9 @@ package com.proyectosPersonales.springboot.app.gastos.dto;
 import lombok.Data;
 
 @Data
-public class UsuarioAmigo {
+public class UsuarioGrupo {
 	
 	private Usuario usuario;
-	
-	private Amigo amigo;
 	
 	private String nombreGrupo;
 

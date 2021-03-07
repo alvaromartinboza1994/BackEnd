@@ -10,8 +10,8 @@ public interface PagoService {
 	
 	void añadirUsuarioPago(UsuarioPago usuarioPago);
 	
-	List<UsuarioPago> consultarPagosCompartidos(String codUsuario);
+	List<UsuarioPago> consultarPagosCompartidos(String nombreGrupo);
 	
-	List<Balance> calcularBalance(String codUsuario);
+	List<Balance> calcularBalance(String nombreGrupo);
 
 }

@@ -6,18 +6,12 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.proyectosPersonales.springboot.app.gastos.dto.Amigo;
 import com.proyectosPersonales.springboot.app.gastos.dto.Grupo;
 import com.proyectosPersonales.springboot.app.gastos.dto.GrupoPK;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
-import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioAmigo;
 import com.proyectosPersonales.springboot.app.gastos.repository.GrupoDaoI;
-import com.proyectosPersonales.springboot.app.gastos.repository.UsuarioDaoI;
-import com.proyectosPersonales.springboot.app.gastos.service.interfaces.AmigoService;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.GrupoService;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 public class GrupoServiceImpl implements GrupoService {

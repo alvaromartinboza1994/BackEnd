@@ -13,7 +13,7 @@ public class UsuarioPago {
 	
 	private String codUsuario;
 	
-	private Long importe; 
+	private Double importe; 
 
 	private String descripcion;
 	

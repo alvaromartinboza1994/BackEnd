@@ -28,14 +28,14 @@ public class PagoController {
 		pagoService.añadirUsuarioPago(usuarioPago);
 	}
 	
-	@GetMapping("/consultarPagosCompartidos/{codUsuario}")
-	public List<UsuarioPago> consultarPagosCompartidos(@PathVariable String codUsuario) {
-		return pagoService.consultarPagosCompartidos(codUsuario);
+	@GetMapping("/consultarPagosCompartidos/{nombreGrupo}")
+	public List<UsuarioPago> consultarPagosCompartidos(@PathVariable String nombreGrupo) {
+		return pagoService.consultarPagosCompartidos(nombreGrupo);
 	}
 	
-	@GetMapping("/calcularBalance/{codUsuario}")
-	public List<Balance> calcularBalance(@PathVariable String codUsuario) {
-		return pagoService.calcularBalance(codUsuario);
+	@GetMapping("/calcularBalance/{nombreGrupo}")
+	public List<Balance> calcularBalance(@PathVariable String nombreGrupo) {
+		return pagoService.calcularBalance(nombreGrupo);
 	}
 
 }

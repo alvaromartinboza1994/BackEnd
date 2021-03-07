@@ -34,7 +34,7 @@ public class Deuda {
 	@Column(name = "idDeuda")
 	private Integer idDeuda;
 
-	private Long importe; // importe del pago
+	private Double importe; // importe del pago
 
 	private String descripcion;// descripcion del pago
 

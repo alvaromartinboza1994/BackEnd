@@ -33,7 +33,7 @@ public class Pago {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	private Long importe; // importe del pago
+	private Double importe; // importe del pago
 
 	private String descripcion;// descripcion del pago
 
