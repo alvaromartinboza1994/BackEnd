@@ -5,6 +5,6 @@ import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;
 
 public interface PagoService {
 	
-	void añadirPagoUsuario(UsuarioPago usuarioPago);
+	void añadirUsuarioPago(UsuarioPago usuarioPago);
 
 }

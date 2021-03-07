@@ -27,12 +27,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Pago implements Serializable {
-
-	private static final long serialVersionUID = 1048110091610768887L;
+public class Pago {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private Long importe; // importe del pago

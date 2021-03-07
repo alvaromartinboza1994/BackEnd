@@ -1,20 +1,15 @@
 
 package com.proyectosPersonales.springboot.app.gastos.dto;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Usuario {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idUsuario")
 	private Integer idUsuario;
 
@@ -40,9 +35,9 @@ public class Usuario {
 	@Column(name = "apellidos")
 	private String apellidos;
 
-	//@OneToMany(mappedBy = "idAmigo")
-	//@Column(name = "misAmigos")
-	//private List<Amigo> listaAmigos;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "idUsuario")
+	private List<Amigo> misAmigos;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "idUsuario")
