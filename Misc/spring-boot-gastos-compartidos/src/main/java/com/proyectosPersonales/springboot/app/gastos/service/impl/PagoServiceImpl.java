@@ -2,6 +2,7 @@
 package com.proyectosPersonales.springboot.app.gastos.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -24,7 +25,10 @@ import com.proyectosPersonales.springboot.app.gastos.service.interfaces.GrupoSer
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PagoService;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class PagoServiceImpl implements PagoService {
 	
 	@Autowired
@@ -54,7 +58,7 @@ public class PagoServiceImpl implements PagoService {
 								.importe((double) usuarioPago.getImporte() / miGrupo.getParticipantes().size())
 								.descripcion(usuarioPago.getDescripcion())
 								.fecha(usuarioPago.getFecha())
-								.idPagador(usuario_db.getIdUsuario())
+								.codPagador(usuario_db.getCodUsuario())
 								.build();
 						participante_db.getMisDeudas().add(deuda);
 						usuarioService.guardarUsuario(participante_db);
@@ -128,68 +132,40 @@ public class PagoServiceImpl implements PagoService {
 
 	@Override
 	public List<UsuarioDeuda> calcularMinimoPagos(String nombreGrupo) {
+		List<UsuarioDeuda> usuariosDeudas = new ArrayList<>();
 		Grupo grupo_db = grupoService.buscarGrupo(nombreGrupo);
 		if(grupo_db != null) {
+			//1)Para cada participante, unificar deudas de un mismo compañero
 			grupo_db.getParticipantes().forEach(participante -> {
-				Grupo grupo_db_local = grupoService.buscarGrupo(nombreGrupo);
-				grupo_db_local.getParticipantes().forEach(compi -> {
-					if(!compi.getIdUsuario().equals(participante.getIdUsuario())) {
-						//1)comprobar si tengo deudas con el usuario i
-						Double miDeudaContigo = participante.getMisDeudas().stream()
-								.filter(deuda -> compi.getIdUsuario().equals(deuda.getIdPagador()))
-								.map(Deuda::getImporte)
-								.collect(Collectors.summingDouble(Double::doubleValue));
-						if(miDeudaContigo > 0) {
-							//2)comprobar si el usuario i tiene deudas conmigo 
-							Double tuDeudaConmigo = compi.getMisDeudas().stream()
-									.filter(deuda -> participante.getIdUsuario().equals(deuda.getIdPagador()))
-									.map(Deuda::getImporte)
-									.collect(Collectors.summingDouble(Double::doubleValue));
-							if(miDeudaContigo > tuDeudaConmigo) {
-								//3)eliminar mis deudas antiguas con compi y hacer una sola actualizada
-								List<Deuda> deudasEliminar = participante.getMisDeudas().stream()
-									.filter(deuda -> compi.getIdUsuario().equals(deuda.getIdPagador()))
-									.collect(Collectors.toList());
-								participante.getMisDeudas().removeAll(deudasEliminar);
-								Calendar calendar = Calendar.getInstance();
-								calendar.setTime(new Date());
-								participante.getMisDeudas().add(Deuda.builder()
-										.descripcion("Deuda Actualiza")
-										.importe(miDeudaContigo - tuDeudaConmigo)
-										.fecha(calendar)
-										.idPagador(compi.getIdUsuario())
-										.build());
-								usuarioService.guardarUsuario(participante);
-								//4)comprobar deudas asumibles
-								//5)asumimos primero las deudas mas pequeñas para reducir movimientos
-								compi.getMisDeudas().stream().sorted(Comparator.comparing(Deuda::getImporte));
-								compi.getMisDeudas().forEach(deuda -> {
-									Deuda miDeuda = participante.getMisDeudas().stream()
-											.filter(deuda_local -> compi.getIdUsuario().equals(deuda_local.getIdPagador()))
-											.findFirst().orElse(Deuda.builder().build());
-									if(miDeuda.getImporte() != null && deuda.getImporte() < miDeuda.getImporte()) {
-										participante.getMisDeudas().remove(miDeuda);
-										compi.getMisDeudas().remove(deuda);
-										miDeuda.setImporte(miDeuda.getImporte() - deuda.getImporte());
-										participante.getMisDeudas().add(miDeuda);
-										usuarioService.guardarUsuario(participante);
-										usuarioService.guardarUsuario(compi);
-									}
-								});
-							}
+				grupo_db.getParticipantes().forEach(compi -> {
+					if(!participante.getCodUsuario().equals(compi.getCodUsuario())) {
+						List<Deuda> misDeudasUnificadas = participante.getMisDeudas().stream()
+								.filter(deuda -> deuda.getCodPagador().equals(compi.getCodUsuario()))
+								.collect(Collectors.toList());
+						participante.getMisDeudas().removeAll(misDeudasUnificadas);
+						Double totalDeuda = misDeudasUnificadas.stream()
+							.map(Deuda::getImporte)
+							.collect(Collectors.summingDouble(Double::doubleValue));
+						if(totalDeuda > 0) {
+							Calendar calendar = Calendar.getInstance();
+							calendar.setTime(new Date());
+							usuariosDeudas.add(UsuarioDeuda.builder()
+									.deudor(participante.getCodUsuario())
+									.deuda(Deuda.builder()
+											.importe(totalDeuda)
+											.descripcion("Deuda Unificada")
+											.fecha(calendar)
+											.codPagador(compi.getCodUsuario())
+											.build())
+									.build());
+							log.info(usuariosDeudas.toString());
+							
 						}
 					}
 				});
 			});
 		}
-		grupo_db = grupoService.buscarGrupo(nombreGrupo);
-		List<UsuarioDeuda> usuariosDeudas = new ArrayList<>();
-		grupo_db.getParticipantes().forEach(participante -> {
-			usuariosDeudas.add(UsuarioDeuda.builder()
-					.deudas(participante.getMisDeudas())
-					.codUsuario(participante.getCodUsuario())
-					.build());
-		});
+		
 		return usuariosDeudas;
 	}
 	

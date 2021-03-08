@@ -26,11 +26,6 @@ public class DeudaServiceImpl implements DeudaService {
 	}
 
 	@Override
-	public List<Deuda> buscarDeudaPorIdPagador(Integer idPagador) {
-		return deudaDao.findByIdPagador(idPagador);
-	}
-
-	@Override
 	public void eliminarDeuda(Deuda deuda) {
 		deudaDao.delete(deuda);
 	}

@@ -42,4 +42,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 		throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "No existe el usuario " + codUsuario);
 	}
 
+	@Override
+	public Usuario buscarPorIdUsuario(Integer idUsuario) {
+		Usuario usuario_db = usuarioDao.findById(idUsuario).orElseGet(null);
+		if(usuario_db != null) {
+			return usuario_db;
+		}
+		throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "No existe el usuario con Id " + idUsuario);
+	}
+
 }

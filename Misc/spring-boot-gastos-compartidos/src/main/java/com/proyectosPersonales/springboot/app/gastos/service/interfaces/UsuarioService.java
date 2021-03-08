@@ -7,6 +7,8 @@ public interface UsuarioService {
 	Usuario buscarPorNombreYApellidos(String nombre, String apellidos);
 	
 	Usuario buscarPorCodUsuario(String codUsuario);
+	
+	Usuario buscarPorIdUsuario(Integer idUsuario);
 
 	void guardarUsuario(Usuario usuario);
 

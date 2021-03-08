@@ -1,6 +1,5 @@
 package com.proyectosPersonales.springboot.app.gastos.dto;
 
-import java.util.Calendar;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsuarioDeuda {
 	
-	private List<Deuda> deudas;
+	private Deuda deuda;
 	
-	private String codUsuario;
+	private String deudor;
 }
