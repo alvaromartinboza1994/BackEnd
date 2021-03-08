@@ -30,4 +30,9 @@ public class DeudaServiceImpl implements DeudaService {
 		return deudaDao.findByIdPagador(idPagador);
 	}
 
+	@Override
+	public void eliminarDeuda(Deuda deuda) {
+		deudaDao.delete(deuda);
+	}
+
 }

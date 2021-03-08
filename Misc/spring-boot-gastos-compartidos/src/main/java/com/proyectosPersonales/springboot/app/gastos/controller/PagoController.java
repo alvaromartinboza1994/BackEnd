@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Balance;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioDeuda;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PagoService;
 
@@ -36,6 +37,11 @@ public class PagoController {
 	@GetMapping("/calcularBalance/{nombreGrupo}")
 	public List<Balance> calcularBalance(@PathVariable String nombreGrupo) {
 		return pagoService.calcularBalance(nombreGrupo);
+	}
+	
+	@GetMapping("/calcularMinimoPagos/{nombreGrupo}")
+	public List<UsuarioDeuda> calcularMinimoPagos(@PathVariable String nombreGrupo) {
+		return pagoService.calcularMinimoPagos(nombreGrupo);
 	}
 
 }

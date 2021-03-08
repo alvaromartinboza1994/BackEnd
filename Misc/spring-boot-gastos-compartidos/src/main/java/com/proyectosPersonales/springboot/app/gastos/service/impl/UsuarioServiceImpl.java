@@ -18,9 +18,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
 	private UsuarioDaoI usuarioDao;
-	
-	@Autowired
-	private DeudaService deudaService;
 
 	@Override
 	public void guardarUsuario(Usuario usuario) {

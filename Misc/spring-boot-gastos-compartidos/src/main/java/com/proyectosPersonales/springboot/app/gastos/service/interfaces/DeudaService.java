@@ -8,6 +8,8 @@ public interface DeudaService {
 
 	void guardarDeuda(Deuda deuda);
 	
+	void eliminarDeuda(Deuda deuda);
+	
 	List<Deuda> buscarDeudaPorIdPagador(Integer idPagador);
 
 }
