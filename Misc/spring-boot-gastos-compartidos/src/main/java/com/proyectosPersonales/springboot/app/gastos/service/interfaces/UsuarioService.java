@@ -10,6 +10,6 @@ public interface UsuarioService {
 	
 	Usuario buscarPorIdUsuario(Integer idUsuario);
 
-	void guardarUsuario(Usuario usuario);
+	Usuario guardarUsuario(Usuario usuario);
 
 }

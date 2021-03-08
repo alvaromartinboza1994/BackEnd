@@ -20,8 +20,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private UsuarioDaoI usuarioDao;
 
 	@Override
-	public void guardarUsuario(Usuario usuario) {
-		usuarioDao.save(usuario);
+	public Usuario guardarUsuario(Usuario usuario) {
+		return usuarioDao.save(usuario);
 	}
 
 	@Override
