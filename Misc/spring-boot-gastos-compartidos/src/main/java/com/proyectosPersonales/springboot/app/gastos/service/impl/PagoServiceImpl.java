@@ -132,40 +132,44 @@ public class PagoServiceImpl implements PagoService {
 
 	@Override
 	public List<UsuarioDeuda> calcularMinimoPagos(String nombreGrupo) {
-		List<UsuarioDeuda> usuariosDeudas = new ArrayList<>();
+		List<UsuarioDeuda> deudasUnificadas = new ArrayList<>();
 		Grupo grupo_db = grupoService.buscarGrupo(nombreGrupo);
 		if(grupo_db != null) {
-			//1)Para cada participante, unificar deudas de un mismo compañero
-			grupo_db.getParticipantes().forEach(participante -> {
-				grupo_db.getParticipantes().forEach(compi -> {
-					if(!participante.getCodUsuario().equals(compi.getCodUsuario())) {
-						List<Deuda> misDeudasUnificadas = participante.getMisDeudas().stream()
-								.filter(deuda -> deuda.getCodPagador().equals(compi.getCodUsuario()))
-								.collect(Collectors.toList());
-						participante.getMisDeudas().removeAll(misDeudasUnificadas);
-						Double totalDeuda = misDeudasUnificadas.stream()
-							.map(Deuda::getImporte)
-							.collect(Collectors.summingDouble(Double::doubleValue));
-						if(totalDeuda > 0) {
-							Calendar calendar = Calendar.getInstance();
-							calendar.setTime(new Date());
-							usuariosDeudas.add(UsuarioDeuda.builder()
-									.deudor(participante.getCodUsuario())
-									.deuda(Deuda.builder()
-											.importe(totalDeuda)
-											.descripcion("Deuda Unificada")
-											.fecha(calendar)
-											.codPagador(compi.getCodUsuario())
-											.build())
-									.build());
-							log.info(usuariosDeudas.toString());
-							
-						}
+			deudasUnificadas = unificarPagos(grupo_db);
+		}		
+		return deudasUnificadas;
+	}
+
+	public List<UsuarioDeuda> unificarPagos(Grupo grupo) {
+		List<UsuarioDeuda> usuariosDeudas = new ArrayList<>();
+		grupo.getParticipantes().forEach(participante -> {
+			grupo.getParticipantes().forEach(compi -> {
+				if(!participante.getCodUsuario().equals(compi.getCodUsuario())) {
+					List<Deuda> misDeudasUnificadas = participante.getMisDeudas().stream()
+							.filter(deuda -> deuda.getCodPagador().equals(compi.getCodUsuario()))
+							.collect(Collectors.toList());
+					participante.getMisDeudas().removeAll(misDeudasUnificadas);
+					Double totalDeuda = misDeudasUnificadas.stream()
+						.map(Deuda::getImporte)
+						.collect(Collectors.summingDouble(Double::doubleValue));
+					if(totalDeuda > 0) {
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(new Date());
+						usuariosDeudas.add(UsuarioDeuda.builder()
+								.deudor(participante.getCodUsuario())
+								.deuda(Deuda.builder()
+										.importe(totalDeuda)
+										.descripcion("Deuda Unificada")
+										.fecha(calendar)
+										.codPagador(compi.getCodUsuario())
+										.build())
+								.build());
+						log.info(usuariosDeudas.toString());
+						
 					}
-				});
+				}
 			});
-		}
-		
+		});
 		return usuariosDeudas;
 	}
 	
