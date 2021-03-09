@@ -10,5 +10,7 @@ public interface UsuarioDaoI extends JpaRepository<Usuario, Integer>{
 	Usuario findByNombreAndApellidos(String nombre, String apellidos);
 	
 	Usuario findByCodUsuario(String codUsuario);
+	
+	Usuario findByIdUsuario(Integer idUsuario);
 
 }
