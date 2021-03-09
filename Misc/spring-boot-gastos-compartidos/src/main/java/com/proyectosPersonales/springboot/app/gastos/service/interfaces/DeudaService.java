@@ -4,8 +4,10 @@ import com.proyectosPersonales.springboot.app.gastos.dto.Deuda;
 
 public interface DeudaService {
 
-	void guardarDeuda(Deuda deuda);
+	Deuda guardarDeuda(Deuda deuda);
 	
 	void eliminarDeuda(Deuda deuda);
+	
+	Deuda buscarDeudaPorIdDeuda(Integer idDeuda);
 
 }

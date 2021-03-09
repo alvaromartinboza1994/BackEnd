@@ -21,13 +21,22 @@ public class DeudaServiceImpl implements DeudaService {
 	DeudaDaoI deudaDao;
 
 	@Override
-	public void guardarDeuda(Deuda deuda) {
-		deudaDao.save(deuda);
+	public Deuda guardarDeuda(Deuda deuda) {
+		return deudaDao.save(deuda);
 	}
 
 	@Override
 	public void eliminarDeuda(Deuda deuda) {
 		deudaDao.delete(deuda);
+	}
+
+	@Override
+	public Deuda buscarDeudaPorIdDeuda(Integer idDeuda) {
+		Deuda deuda_db = deudaDao.findByIdDeuda(idDeuda);
+		if(deuda_db != null) {
+			return deuda_db;
+		}
+		throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "No existe la deuda " + idDeuda);
 	}
 
 }

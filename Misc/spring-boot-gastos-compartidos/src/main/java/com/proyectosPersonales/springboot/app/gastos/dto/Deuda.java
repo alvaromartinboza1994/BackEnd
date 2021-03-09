@@ -33,12 +33,5 @@ public class Deuda {
 	
 	private String codPagador;
 
-	@Override
-	public String toString() {
-		return "Deuda [idDeuda=" + idDeuda + ", importe=" + importe + ", descripcion=" + descripcion + ", codPagador="
-				+ codPagador + "]";
-	}
-	
-	
 
 }
