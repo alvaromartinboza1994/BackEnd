@@ -31,21 +31,21 @@ public class UsuarioServiceImplTest {
     @Test
     public void guardarUsuario_UsuarioCorrecto() throws Exception {
     	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
-        Usuario usuario = usuarioService.guardarUsuario(crearUsuarioCorrecto());
+        Usuario usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto());
         assertEquals(usuario, crearUsuarioCorrecto());
     }
     
     @Test
     public void guardarUsuario_UsuarioVacio() throws Exception {
     	when(usuarioDao.save(any())).thenReturn(crearUsuarioVacio());
-        Usuario usuario = usuarioService.guardarUsuario(crearUsuarioCorrecto());
+        Usuario usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto());
         assertNotEquals(usuario, crearUsuarioCorrecto());
     }
     
     @Test
     public void guardarUsuario_UsuarioDistinto() throws Exception {
     	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
-        Usuario usuario = usuarioService.guardarUsuario(crearUsuarioCorrecto2());
+        Usuario usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto2());
         assertNotEquals(usuario.getNombre(), crearUsuarioCorrecto2().getNombre());
     }
    

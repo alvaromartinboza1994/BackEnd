@@ -61,13 +61,13 @@ public class PagoServiceImpl implements PagoService {
 								.codPagador(usuario_db.getCodUsuario())
 								.build();
 						participante_db.getMisDeudas().add(deuda);
-						usuarioService.guardarUsuario(participante_db);
+						usuarioService.actualizarUsuario(participante_db);
 					}			
 				});
 			}
 			
 		}
-		return usuarioService.guardarUsuario(usuario_db);
+		return usuarioService.actualizarUsuario(usuario_db);
 	}
 
 	@Override

@@ -39,7 +39,7 @@ public class GrupoServiceImplTest {
     	when(usuarioService.buscarPorCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	Usuario usuario = usuarioService.buscarPorCodUsuario("");
     	when(usuarioService.guardarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo());
-    	usuario = usuarioService.guardarUsuario(crearUsuarioCorrecto_ConGrupo());
+    	usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo());
     	when(grupoDao.save(any())).thenReturn(crearGrupoCorrecto());
     	Grupo grupo = grupoService.crearGrupo("", "");
         assertEquals(grupo.getId().getNombreGrupo(), usuario.getMiGrupo());

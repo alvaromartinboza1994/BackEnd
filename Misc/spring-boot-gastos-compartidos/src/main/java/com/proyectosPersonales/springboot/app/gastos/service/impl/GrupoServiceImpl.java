@@ -31,7 +31,7 @@ public class GrupoServiceImpl implements GrupoService {
 		if(usuario_db != null) {
 			miGrupo = Grupo.builder().id(GrupoPK.builder().nombreGrupo(nombreGrupo).idGrupo(grupoDao.findAll().size()+1).build()).participantes(Arrays.asList(usuario_db)).build();
 			usuario_db.setMiGrupo(miGrupo.getId().getNombreGrupo());
-			usuarioService.guardarUsuario(usuario_db);
+			usuarioService.actualizarUsuario(usuario_db);
 		}
 		return grupoDao.save(miGrupo);
 	}
@@ -45,7 +45,7 @@ public class GrupoServiceImpl implements GrupoService {
 			if(grupo_db != null) {
 				grupo_db.getParticipantes().add(usuario_db);
 				usuario_db.setMiGrupo(grupo_db.getId().getNombreGrupo());
-				usuarioService.guardarUsuario(usuario_db);
+				usuarioService.actualizarUsuario(usuario_db);
 			}
 		}
 		return grupoDao.save(grupo_db);
