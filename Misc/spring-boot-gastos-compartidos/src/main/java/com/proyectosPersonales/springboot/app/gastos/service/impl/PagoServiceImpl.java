@@ -41,7 +41,7 @@ public class PagoServiceImpl implements PagoService {
 	private BalanceService balanceService;
 	
 	@Override
-	public void añadirUsuarioPago(UsuarioPago usuarioPago) {
+	public Usuario añadirUsuarioPago(UsuarioPago usuarioPago) {
 		Usuario usuario_db = usuarioService.buscarPorCodUsuario(usuarioPago.getCodUsuario());
 		if(usuario_db != null) {
 			usuario_db.getMisPagos().add(Pago.builder()
@@ -65,69 +65,64 @@ public class PagoServiceImpl implements PagoService {
 					}			
 				});
 			}
-			usuarioService.guardarUsuario(usuario_db);
+			
 		}
+		return usuarioService.guardarUsuario(usuario_db);
 	}
 
 	@Override
 	public List<UsuarioPago> consultarPagosCompartidos(String nombreGrupo) {
 		Grupo grupo_db = grupoService.buscarGrupo(nombreGrupo);
+		List<UsuarioPago> pagosCompartidos = new ArrayList<>();
 		if(grupo_db != null) {
-			List<UsuarioPago> pagosCompartidos = new ArrayList<>();
-			if(grupo_db != null) {
-				grupo_db.getParticipantes().forEach(participante -> {
-					Usuario participante_db = usuarioService.buscarPorCodUsuario(participante.getCodUsuario());
-					if(participante_db != null) {
-						pagosCompartidos.addAll(participante_db.getMisPagos()
-						.stream()
-						.map(pago -> {
-							UsuarioPago usuarioPago = UsuarioPago.builder()
-									.codUsuario(participante_db.getCodUsuario())
-									.importe((double) pago.getImporte())
-									.descripcion(pago.getDescripcion())
-									.fecha(pago.getFecha())
-									.build();
-							return usuarioPago;
-						})
-						.collect(Collectors.toList()));
-					}
-				});	
-			}	
-			
-			return pagosCompartidos.stream()
-					.sorted(Comparator.comparing(UsuarioPago::getFecha).reversed())
-					.collect(Collectors.toList());
-		}
-		return null;
+			grupo_db.getParticipantes().forEach(participante -> {
+				Usuario participante_db = usuarioService.buscarPorCodUsuario(participante.getCodUsuario());
+				if(participante_db != null) {
+					pagosCompartidos.addAll(participante_db.getMisPagos()
+					.stream()
+					.map(pago -> {
+						UsuarioPago usuarioPago = UsuarioPago.builder()
+								.codUsuario(participante_db.getCodUsuario())
+								.importe((double) pago.getImporte())
+								.descripcion(pago.getDescripcion())
+								.fecha(pago.getFecha())
+								.build();
+						return usuarioPago;
+					})
+					.collect(Collectors.toList()));
+				}
+			});	
+		}	
+		
+		return pagosCompartidos.stream()
+				.sorted(Comparator.comparing(UsuarioPago::getFecha).reversed())
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Balance> calcularBalance(String nombreGrupo) {
 		Grupo grupo_db = grupoService.buscarGrupo(nombreGrupo);
-		if(grupo_db != null) {
-			List<UsuarioPago> pagosCompartidos = consultarPagosCompartidos(nombreGrupo);
-			
-			Double gastosPorPersona = (double) pagosCompartidos.stream()
-				.map(usuarioPago -> usuarioPago.getImporte())
-				.collect(Collectors.summingDouble(Double::doubleValue)) / grupo_db.getParticipantes().size(); 
-			
-			List<Balance> listaBalances = new ArrayList<>();
-			
-			grupo_db.getParticipantes().forEach(participante -> {
-				Usuario participante_db = usuarioService.buscarPorCodUsuario(participante.getCodUsuario());
-				if(participante_db != null) {
-					Double gastosParticipante = participante_db.getMisPagos().stream()
-							.map(Pago::getImporte)
-							.collect(Collectors.summingDouble(Double::doubleValue));
-					listaBalances.add(Balance.builder().codUsuario(participante_db.getCodUsuario()).importe(gastosParticipante - gastosPorPersona).build());
-				}
-			});		
-			listaBalances.forEach(balance -> {
-				balanceService.añadirBalance(balance);
-			});
-			return listaBalances;
-		}		
-		return null;
+		List<UsuarioPago> pagosCompartidos = consultarPagosCompartidos(nombreGrupo);
+		
+		Double gastosPorPersona = (double) pagosCompartidos.stream()
+			.map(usuarioPago -> usuarioPago.getImporte())
+			.collect(Collectors.summingDouble(Double::doubleValue)) / grupo_db.getParticipantes().size(); 
+		
+		List<Balance> listaBalances = new ArrayList<>();
+		
+		grupo_db.getParticipantes().forEach(participante -> {
+			Usuario participante_db = usuarioService.buscarPorCodUsuario(participante.getCodUsuario());
+			if(participante_db != null) {
+				Double gastosParticipante = participante_db.getMisPagos().stream()
+						.map(Pago::getImporte)
+						.collect(Collectors.summingDouble(Double::doubleValue));
+				listaBalances.add(Balance.builder().codUsuario(participante_db.getCodUsuario()).importe(gastosParticipante - gastosPorPersona).build());
+			}
+		});		
+		listaBalances.forEach(balance -> {
+			balanceService.añadirBalance(balance);
+		});
+		return listaBalances;
 	}
 
 	@Override

@@ -66,7 +66,7 @@ public class GrupoServiceImplTest {
     	Usuario usuario = usuarioService.buscarPorCodUsuario("");
     	when(grupoDao.findByIdNombreGrupo(any())).thenReturn(crearGrupoCorrecto());
     	when(usuarioService.guardarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo());
-    	when(grupoDao.save(any())).thenReturn(crearGrupoCorrecto_ConParticipante(usuario));
+    	when(grupoDao.save(any())).thenReturn(crearGrupoCorrecto_ConParticipante(crearUsuarioCorrecto()));
     	Grupo grupo = grupoService.añadirParticipante("", "");
         assertFalse(grupo.getParticipantes().isEmpty());
     }
