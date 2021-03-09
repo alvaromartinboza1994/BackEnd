@@ -14,8 +14,8 @@ public class BalanceServiceImpl implements BalanceService {
 	private BalanceDaoI balanceDao;
 
 	@Override
-	public void añadirBalance(Balance balance) {
-		balanceDao.save(balance);	
+	public Balance añadirBalance(Balance balance) {
+		return balanceDao.save(balance);	
 	}
 
 

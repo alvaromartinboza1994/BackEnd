@@ -5,6 +5,6 @@ import com.proyectosPersonales.springboot.app.gastos.dto.Balance;
 
 public interface BalanceService {
 
-	void añadirBalance(Balance balance);
+	Balance añadirBalance(Balance balance);
 
 }
