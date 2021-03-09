@@ -1,36 +1,40 @@
 package com.proyectosPersonales.springboot.app.gastos.service.impl;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioContrasena;
+import com.proyectosPersonales.springboot.app.gastos.exception.ApiException;
 import com.proyectosPersonales.springboot.app.gastos.repository.UsuarioContrasenaDaoI;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioContrasenaService;
-import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
 
 @Service
 public class UsuarioContrasenaServiceImpl implements UsuarioContrasenaService {
 
 	@Autowired
 	private UsuarioContrasenaDaoI usuarioContrasenaDao;
-	
-	@Autowired
-	private UsuarioService usuarioService;
-	
+		
 	@Override
+	@Transactional
 	public UsuarioContrasena guardarUsuarioContrasena(UsuarioContrasena signup) {
-		return usuarioContrasenaDao.save(signup);
+		try {
+			return usuarioContrasenaDao.save(signup);
+		} catch (Exception e) {
+			throw new ApiException("PERSISTENCE_ERROR", "No se ha podido guardar el usuario " + signup.getUsuario().getCodUsuario() + " con contraseña " + signup.getContraseña());
+		}
+		
 	}
 
 	@Override
+	@Transactional
 	public UsuarioContrasena buscarPorUsuarioCodUsuario(String codUsuario) {
-		UsuarioContrasena usuarioContrasena = usuarioContrasenaDao.findByUsuarioCodUsuario(codUsuario);
-		if(usuarioContrasena != null) {
-			return usuarioContrasena;
+		try {
+			return usuarioContrasenaDao.findByUsuarioCodUsuario(codUsuario);
+		} catch (Exception e) {
+			throw new ApiException("USER_NOT_FOUND", "No existe el usuario " + codUsuario);
 		}
-		throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "No existe el usuario " + codUsuario);
 	}
 
 }

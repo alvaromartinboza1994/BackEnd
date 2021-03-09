@@ -2,12 +2,13 @@
 package com.proyectosPersonales.springboot.app.gastos.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,6 @@ import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioDeuda;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.BalanceService;
-import com.proyectosPersonales.springboot.app.gastos.service.interfaces.DeudaService;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.GrupoService;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PagoService;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
@@ -41,6 +41,7 @@ public class PagoServiceImpl implements PagoService {
 	private BalanceService balanceService;
 	
 	@Override
+	@Transactional
 	public Usuario añadirUsuarioPago(UsuarioPago usuarioPago) {
 		Usuario usuario_db = usuarioService.buscarPorCodUsuario(usuarioPago.getCodUsuario());
 		if(usuario_db != null) {
@@ -65,12 +66,12 @@ public class PagoServiceImpl implements PagoService {
 					}			
 				});
 			}
-			
 		}
 		return usuarioService.actualizarUsuario(usuario_db);
 	}
 
 	@Override
+	@Transactional
 	public List<UsuarioPago> consultarPagosCompartidos(String nombreGrupo) {
 		Grupo grupo_db = grupoService.buscarGrupo(nombreGrupo);
 		List<UsuarioPago> pagosCompartidos = new ArrayList<>();
@@ -100,6 +101,7 @@ public class PagoServiceImpl implements PagoService {
 	}
 
 	@Override
+	@Transactional
 	public List<Balance> calcularBalance(String nombreGrupo) {
 		Grupo grupo_db = grupoService.buscarGrupo(nombreGrupo);
 		List<UsuarioPago> pagosCompartidos = consultarPagosCompartidos(nombreGrupo);
@@ -126,6 +128,7 @@ public class PagoServiceImpl implements PagoService {
 	}
 
 	@Override
+	@Transactional
 	public List<UsuarioDeuda> calcularMinimoPagos(String nombreGrupo) {
 		List<UsuarioDeuda> deudasUnificadas = new ArrayList<>();
 		Grupo grupo_db = grupoService.buscarGrupo(nombreGrupo);
