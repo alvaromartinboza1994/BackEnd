@@ -14,6 +14,15 @@ public class UsuarioServiceImplTestUtil {
 				.build();
 	}
 	
+	public static Usuario crearUsuarioCorrecto_ConGrupo() {
+		return Usuario.builder()
+				.nombre("N")
+				.apellidos("AP1")
+				.codUsuario("NAP1")
+				.miGrupo("misAmigos")
+				.build();
+	}
+	
 	public static Optional<Usuario> crearUsuarioCorrecto_Optional() {
 		return Optional.of(Usuario.builder()
 				.nombre("N")

@@ -6,9 +6,9 @@ import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
 
 public interface GrupoService {
 
-	void crearGrupo(String nombreGrupo, String codUsuario);
+	Grupo crearGrupo(String nombreGrupo, String codUsuario) throws Exception;
 	
-	void añadirParticipante(String nombreGrupo, String codUsuario);
+	Grupo añadirParticipante(String nombreGrupo, String codUsuario);
 	
 	Grupo buscarGrupo(String nombreGrupo);
 

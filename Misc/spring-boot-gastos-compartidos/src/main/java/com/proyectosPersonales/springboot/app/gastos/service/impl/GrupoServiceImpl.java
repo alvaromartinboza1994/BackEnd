@@ -4,7 +4,9 @@ package com.proyectosPersonales.springboot.app.gastos.service.impl;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Grupo;
 import com.proyectosPersonales.springboot.app.gastos.dto.GrupoPK;
@@ -23,32 +25,38 @@ public class GrupoServiceImpl implements GrupoService {
 	UsuarioService usuarioService;
 
 	@Override
-	public void crearGrupo(String nombreGrupo, String codUsuario) {
+	public Grupo crearGrupo(String nombreGrupo, String codUsuario) throws Exception {
 		Usuario usuario_db = usuarioService.buscarPorCodUsuario(codUsuario);
+		Grupo miGrupo = Grupo.builder().build();
 		if(usuario_db != null) {
-			Grupo miGrupo = Grupo.builder().id(GrupoPK.builder().nombreGrupo(nombreGrupo).idGrupo(grupoDao.findAll().size()+1).build()).participantes(Arrays.asList(usuario_db)).build();
+			miGrupo = Grupo.builder().id(GrupoPK.builder().nombreGrupo(nombreGrupo).idGrupo(grupoDao.findAll().size()+1).build()).participantes(Arrays.asList(usuario_db)).build();
 			usuario_db.setMiGrupo(miGrupo.getId().getNombreGrupo());
-			grupoDao.save(miGrupo);
 			usuarioService.guardarUsuario(usuario_db);
 		}
+		return grupoDao.save(miGrupo);
 	}
 
 	@Override
-	public void añadirParticipante(String nombreGrupo, String codUsuario) {
+	public Grupo añadirParticipante(String nombreGrupo, String codUsuario) {
 		Usuario usuario_db = usuarioService.buscarPorCodUsuario(codUsuario);
+		Grupo grupo_db = Grupo.builder().build();
 		if(usuario_db != null) {
-			Grupo grupo_db = grupoDao.findByIdNombreGrupo(nombreGrupo);
+			grupo_db = grupoDao.findByIdNombreGrupo(nombreGrupo);
 			if(grupo_db != null) {
 				grupo_db.getParticipantes().add(usuario_db);
 				usuario_db.setMiGrupo(grupo_db.getId().getNombreGrupo());
-				grupoDao.save(grupo_db);
 				usuarioService.guardarUsuario(usuario_db);
 			}
 		}
+		return grupoDao.save(grupo_db);
 	}
 
 	@Override
 	public Grupo buscarGrupo(String nombreGrupo) {
-		return grupoDao.findByIdNombreGrupo(nombreGrupo);
+		Grupo grupo_db = grupoDao.findByIdNombreGrupo(nombreGrupo);
+		if(grupo_db != null) {
+			return grupo_db;
+		}
+		throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "No existe el grupo " + nombreGrupo);
 	}
 }

@@ -49,7 +49,7 @@ public class DeudaServiceImplTest {
     }
     
     @Test
-    public void eliminarBalance() throws Exception {
+    public void eliminarDeuda() throws Exception {
     	when(deudaDao.save(any())).thenReturn(crearDeudaCorrecto());
         Deuda deuda = deudaService.guardarDeuda(crearDeudaCorrecto());
         deudaService.eliminarDeuda(deuda);
@@ -63,6 +63,6 @@ public class DeudaServiceImplTest {
     public void buscarDeudaPorIdDeuda_DeudaCorrecta() throws Exception {
     	when(deudaDao.findByIdDeuda(any())).thenReturn(crearDeudaCorrecto());
         Deuda deuda = deudaService.buscarDeudaPorIdDeuda(1);
-        assertNotEquals(deuda, crearDeudaCorrecto());
+        assertEquals(deuda, crearDeudaCorrecto());
     }
 }

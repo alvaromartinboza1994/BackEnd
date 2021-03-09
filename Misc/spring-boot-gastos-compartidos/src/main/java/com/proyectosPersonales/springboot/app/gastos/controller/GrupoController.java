@@ -21,13 +21,13 @@ public class GrupoController {
 	private GrupoService grupoService;
 	
 	@PostMapping("/crearGrupo/{nombre}/usuario/{codUsuario}")
-	public void crearGrupo(@PathVariable String nombre, @PathVariable String codUsuario) {
-		grupoService.crearGrupo(nombre, codUsuario);
+	public Grupo crearGrupo(@PathVariable String nombre, @PathVariable String codUsuario) throws Exception {
+		return grupoService.crearGrupo(nombre, codUsuario);
 	}
 	
 	@PostMapping("/anadirParticipante/{nombreGrupo}/usuario/{codUsuario}")
-	public void añadirParticipante(@PathVariable String nombreGrupo, @PathVariable String codUsuario) {
-		grupoService.añadirParticipante(nombreGrupo, codUsuario);
+	public Grupo añadirParticipante(@PathVariable String nombreGrupo, @PathVariable String codUsuario) {
+		return grupoService.añadirParticipante(nombreGrupo, codUsuario);
 	}
 	
 	@GetMapping("/consultarGrupo/{nombreGrupo}")
