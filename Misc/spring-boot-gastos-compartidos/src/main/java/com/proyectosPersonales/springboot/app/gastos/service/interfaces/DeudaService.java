@@ -6,8 +6,6 @@ public interface DeudaService {
 
 	Deuda guardarDeuda(Deuda deuda);
 	
-	void eliminarDeuda(Deuda deuda);
-	
 	Deuda buscarDeudaPorIdDeuda(Integer idDeuda);
 
 }

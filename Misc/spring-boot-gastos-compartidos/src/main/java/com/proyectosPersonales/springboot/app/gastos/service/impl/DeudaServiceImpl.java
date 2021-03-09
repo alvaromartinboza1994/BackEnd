@@ -28,16 +28,6 @@ public class DeudaServiceImpl implements DeudaService {
 
 	@Override
 	@Transactional
-	public void eliminarDeuda(Deuda deuda) {
-		try {
-			deudaDao.delete(deuda);
-		} catch (Exception e) {
-			throw new ApiException("PERSISTENCE_ERROR", "No se ha podido eliminar la deuda " + deuda.toString());
-		}
-	}
-
-	@Override
-	@Transactional
 	public Deuda buscarDeudaPorIdDeuda(Integer idDeuda) {
 		try {
 			return deudaDao.findByIdDeuda(idDeuda);

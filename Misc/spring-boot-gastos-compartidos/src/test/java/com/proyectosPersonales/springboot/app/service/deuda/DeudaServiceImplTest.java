@@ -1,5 +1,6 @@
 package com.proyectosPersonales.springboot.app.service.deuda;
 
+import static com.proyectosPersonales.springboot.app.service.balance.BalanceServiceImplTestUtil.crearBalanceCorrecto2;
 import static com.proyectosPersonales.springboot.app.service.deuda.DeudaServiceImplTestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Deuda;
+import com.proyectosPersonales.springboot.app.gastos.exception.ApiException;
 import com.proyectosPersonales.springboot.app.gastos.repository.DeudaDaoI;
 import com.proyectosPersonales.springboot.app.gastos.service.impl.DeudaServiceImpl;
 
@@ -49,20 +51,21 @@ public class DeudaServiceImplTest {
     }
     
     @Test
-    public void eliminarDeuda() throws Exception {
-    	when(deudaDao.save(any())).thenReturn(crearDeudaCorrecto());
-        Deuda deuda = deudaService.guardarDeuda(crearDeudaCorrecto());
-        deudaService.eliminarDeuda(deuda);
-        when(deudaDao.findByIdDeuda(any())).thenReturn(null);
-        assertThrows(HttpClientErrorException.class, () -> {
-        	deudaService.buscarDeudaPorIdDeuda(deuda.getIdDeuda());
-        });
-    }
-    
-    @Test
     public void buscarDeudaPorIdDeuda_DeudaCorrecta() throws Exception {
     	when(deudaDao.findByIdDeuda(any())).thenReturn(crearDeudaCorrecto());
         Deuda deuda = deudaService.buscarDeudaPorIdDeuda(1);
         assertEquals(deuda, crearDeudaCorrecto());
+    }
+    
+    @Test
+    public void añadirDeuda_ApiException() throws Exception {
+    	when(deudaDao.save(any())).thenThrow(ApiException.class);
+        assertThrows(ApiException.class, () -> deudaService.guardarDeuda(crearDeudaCorrecto2()));
+    }
+    
+    @Test
+    public void buscarDeuda_ApiException() throws Exception {
+    	when(deudaDao.findByIdDeuda(any())).thenThrow(ApiException.class);
+        assertThrows(ApiException.class, () -> deudaService.buscarDeudaPorIdDeuda(1));
     }
 }

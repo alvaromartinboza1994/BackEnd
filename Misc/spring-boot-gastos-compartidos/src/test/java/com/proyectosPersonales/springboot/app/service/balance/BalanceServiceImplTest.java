@@ -5,6 +5,7 @@ import static com.proyectosPersonales.springboot.app.service.balance.BalanceServ
 import static com.proyectosPersonales.springboot.app.service.balance.BalanceServiceImplTestUtil.crearBalanceVacio;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Balance;
+import com.proyectosPersonales.springboot.app.gastos.exception.ApiException;
 import com.proyectosPersonales.springboot.app.gastos.repository.BalanceDaoI;
 import com.proyectosPersonales.springboot.app.gastos.service.impl.BalanceServiceImpl;
 
@@ -46,5 +48,11 @@ public class BalanceServiceImplTest {
     	when(balanceDao.save(any())).thenReturn(crearBalanceCorrecto());
         Balance balance = balanceService.añadirBalance(crearBalanceCorrecto2());
         assertNotEquals(balance, crearBalanceCorrecto2());
+    }
+    
+    @Test
+    public void añadirBalance_ApiException() throws Exception {
+    	when(balanceDao.save(any())).thenThrow(ApiException.class);
+        assertThrows(ApiException.class, () -> balanceService.añadirBalance(crearBalanceCorrecto2()));
     }
 }

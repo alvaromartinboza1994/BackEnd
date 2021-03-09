@@ -58,7 +58,7 @@ public class PagoServiceImplTest {
     public void añadirUsuarioPago_Correcto()  {
     	when(usuarioService.buscarPorCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	when(grupoService.buscarGrupo(any())).thenReturn(crearGrupoCorrecto_ConParticipante(crearUsuarioCorrecto()));
-    	when(usuarioService.guardarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo());
+    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo());
     	Usuario usuario = pagoService.añadirUsuarioPago(crearUsuarioPago_Correcto(crearUsuarioCorrecto2()));
     	assertFalse(usuario.getMisPagos().isEmpty());
     }
