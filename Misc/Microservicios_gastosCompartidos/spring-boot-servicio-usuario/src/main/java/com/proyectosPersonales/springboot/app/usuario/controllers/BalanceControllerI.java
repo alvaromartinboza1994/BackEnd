@@ -12,7 +12,7 @@ import com.proyectosPersonales.springboot.app.commons.dto.Grupo;
 
 public interface BalanceControllerI {
 
-	@PostMapping("/anadirBalance")
+	@PostMapping("/balance/anadirBalance")
 	public ResponseEntity<Balance> anadirBalance(@RequestBody Balance balance);
 
 }

@@ -13,7 +13,6 @@ import com.proyectosPersonales.springboot.app.usuario.packages.service.interface
 import com.proyectosPersonales.springboot.app.usuario.packages.service.interfaces.GrupoService;
 
 @RestController
-@RequestMapping("balance")
 public class BalanceControllerImpl implements BalanceControllerI{
 
 	@Autowired

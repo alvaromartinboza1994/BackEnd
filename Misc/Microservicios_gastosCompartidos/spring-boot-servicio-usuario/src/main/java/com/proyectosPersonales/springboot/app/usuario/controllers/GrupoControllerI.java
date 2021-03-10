@@ -10,13 +10,13 @@ import com.proyectosPersonales.springboot.app.commons.dto.Grupo;
 
 public interface GrupoControllerI {
 	
-	@PostMapping("/crearGrupo/{nombre}/usuario/{codUsuario}")
+	@PostMapping("/grupo/crearGrupo/{nombre}/usuario/{codUsuario}")
 	public ResponseEntity<Grupo> crearGrupo(@PathVariable String nombre, @PathVariable String codUsuario) throws Exception;
 	
-	@PostMapping("/anadirParticipante/{nombreGrupo}/usuario/{codUsuario}")
+	@PostMapping("/grupo/anadirParticipante/{nombreGrupo}/usuario/{codUsuario}")
 	public ResponseEntity<Grupo> añadirParticipante(@PathVariable String nombreGrupo, @PathVariable String codUsuario);
 	
-	@GetMapping("/buscarGrupo/{nombreGrupo}")
+	@GetMapping("/grupo/buscarGrupo/{nombreGrupo}")
 	public ResponseEntity<Grupo> buscarGrupo(@PathVariable String nombreGrupo);
 
 }

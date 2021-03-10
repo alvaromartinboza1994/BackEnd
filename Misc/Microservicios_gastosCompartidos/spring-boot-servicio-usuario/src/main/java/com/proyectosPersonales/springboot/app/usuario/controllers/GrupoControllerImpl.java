@@ -11,7 +11,6 @@ import com.proyectosPersonales.springboot.app.commons.dto.Grupo;
 import com.proyectosPersonales.springboot.app.usuario.packages.service.interfaces.GrupoService;
 
 @RestController
-@RequestMapping("grupo")
 public class GrupoControllerImpl implements GrupoControllerI{
 
 	@Autowired

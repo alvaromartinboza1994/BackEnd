@@ -17,15 +17,15 @@ import com.proyectosPersonales.springboot.app.commons.dto.UsuarioPago;
 
 public interface PagoControllerI {
 	
-	@PostMapping("/anadirPago")
+	@PostMapping("/pago/anadirPago")
 	public ResponseEntity<Usuario> añadirPago(@RequestBody UsuarioPago usuarioPago);
 	
-	@GetMapping("/consultarPagosCompartidos/{nombreGrupo}")
+	@GetMapping("/pago/consultarPagosCompartidos/{nombreGrupo}")
 	public ResponseEntity<List<UsuarioPago>> consultarPagosCompartidos(@PathVariable String nombreGrupo);
 	
-	@GetMapping("/calcularBalance/{nombreGrupo}")
+	@GetMapping("/pago/calcularBalance/{nombreGrupo}")
 	public ResponseEntity<List<Balance>> calcularBalance(@PathVariable String nombreGrupo);
 	
-	@GetMapping("/calcularMinimoPagos/{nombreGrupo}")
+	@GetMapping("/pago/calcularMinimoPagos/{nombreGrupo}")
 	public ResponseEntity<List<UsuarioDeuda>> calcularMinimoPagos(@PathVariable String nombreGrupo);
 }

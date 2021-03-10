@@ -15,7 +15,6 @@ import com.proyectosPersonales.springboot.app.usuario.packages.service.interface
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("usuario")
 @Slf4j
 public class UsuarioControllerImpl implements UsuarioControllerI{
 

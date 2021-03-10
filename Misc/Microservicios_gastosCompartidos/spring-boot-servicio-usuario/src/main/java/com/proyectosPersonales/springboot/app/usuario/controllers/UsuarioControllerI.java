@@ -12,19 +12,19 @@ import com.proyectosPersonales.springboot.app.commons.dto.UsuarioContrasena;
 
 public interface UsuarioControllerI {
 	
-	@PostMapping("/guardarUsuario")
+	@PostMapping("/usuario/guardarUsuario")
 	public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioContrasena signup);
 	
-	@PutMapping("/actualizarUsuario")
+	@PutMapping("/usuario/actualizarUsuario")
 	public ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuario);
 	
-	@GetMapping("/accederUsuario")
+	@GetMapping("/usuario/accederUsuario")
 	public ResponseEntity<String> accederUsuario(@RequestBody UsuarioContrasena signup);
 	
-	@GetMapping("/buscarPorCodUsuario/{codUsuario}")
+	@GetMapping("/usuario/buscarPorCodUsuario/{codUsuario}")
 	public ResponseEntity<Usuario> buscarPorCodUsuario(@PathVariable String codUsuario);
 	
-	@GetMapping("/welcome")
+	@GetMapping("/usuario/welcome")
 	public ResponseEntity<String> welcome();
 
 }

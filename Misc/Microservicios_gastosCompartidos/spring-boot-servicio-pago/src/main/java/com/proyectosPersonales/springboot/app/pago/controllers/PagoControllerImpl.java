@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +19,8 @@ import com.proyectosPersonales.springboot.app.commons.dto.UsuarioDeuda;
 import com.proyectosPersonales.springboot.app.commons.dto.UsuarioPago;
 import com.proyectosPersonales.springboot.app.pago.service.interfaces.PagoService;
 
+@RefreshScope
 @RestController
-@RequestMapping("pago")
 public class PagoControllerImpl implements PagoControllerI{
 
 	@Autowired
