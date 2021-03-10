@@ -21,5 +21,8 @@ public interface UsuarioControllerI {
 	
 	@GetMapping("/buscarUsuario/{codUsuario}")
 	public ResponseEntity<Usuario> buscarUsuario(@PathVariable String codUsuario);
+	
+	@GetMapping("/welcome")
+	public ResponseEntity<String> buscarUsuario();
 
 }

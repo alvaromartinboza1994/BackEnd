@@ -42,4 +42,9 @@ public class UsuarioControllerImpl implements UsuarioControllerI{
 		return new ResponseEntity<>(usuarioService.buscarPorCodUsuario(codUsuario), HttpStatus.OK);
 	}
 
+	@Override
+	public ResponseEntity<String> buscarUsuario() {
+		return new ResponseEntity<>("Bienvenido a la aplicación de Gastos Compartidos", HttpStatus.OK);
+	}
+
 }
