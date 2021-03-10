@@ -29,9 +29,10 @@ public class DeudaServiceImpl implements DeudaService {
 	@Override
 	@Transactional
 	public Deuda buscarDeudaPorIdDeuda(Integer idDeuda) {
-		try {
-			return deudaDao.findByIdDeuda(idDeuda);
-		} catch (Exception e) {
+		Deuda deuda = deudaDao.findByIdDeuda(idDeuda);
+		if(deuda != null) {
+			return deuda;
+		} else {
 			throw new ApiException("DEUDA_NOT_FOUND", "No se ha podido encontrar la deuda con Id: " + idDeuda);
 		}
 	}

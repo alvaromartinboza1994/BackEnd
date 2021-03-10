@@ -3,7 +3,7 @@ package com.proyectosPersonales.springboot.app.service.usuario;
 import static com.proyectosPersonales.springboot.app.service.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto;
 import static com.proyectosPersonales.springboot.app.service.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto2;
 import static com.proyectosPersonales.springboot.app.service.usuario.UsuarioServiceImplTestUtil.crearUsuarioVacio;
-import static com.proyectosPersonales.springboot.app.service.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.crearUsuarioContrasenaCorrecto;
+import static com.proyectosPersonales.springboot.app.service.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,10 +61,9 @@ public class UsuarioServiceImplTest {
     
     @Test
     public void accederUsuario_ApiException() {
-    	when(usuarioContrasenaService.buscarPorUsuarioCodUsuario(any())).thenThrow(ApiException.class);
-        assertThrows(ApiException.class, () -> {
-        	usuarioService.accederUsuario(crearUsuarioContrasenaCorrecto());
-        });
+    	when(usuarioContrasenaService.buscarPorUsuarioCodUsuario(any())).thenReturn(crearUsuarioContrasenaCorrecto2());
+    	ResponseEntity<String> entity = usuarioService.accederUsuario(crearUsuarioContrasenaCorrecto());
+        assertEquals(entity.getStatusCode(), HttpStatus.FORBIDDEN);
     }
     
     @Test
@@ -88,21 +87,6 @@ public class UsuarioServiceImplTest {
         Usuario usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto2());
         assertNotEquals(usuario.getNombre(), crearUsuarioCorrecto2().getNombre());
     }
-   
-    @Test
-    public void buscarPorNombreYApellidos_UsuarioCorrecto() {
-    	when(usuarioDao.findByNombreAndApellidos(any(), any())).thenReturn(crearUsuarioCorrecto());
-        Usuario usuario = usuarioService.buscarPorNombreYApellidos("", "");
-        assertEquals(usuario, crearUsuarioCorrecto());
-    }
-    
-    @Test
-    public void buscarPorNombreYApellidos_UsuarioNoEncontrado() {
-    	when(usuarioDao.findByNombreAndApellidos(any(), any())).thenThrow(ApiException.class);
-        assertThrows(ApiException.class, () -> {
-        	usuarioService.buscarPorNombreYApellidos("", "");
-        });
-    }
 
     @Test
     public void buscarPorCodUsuario_UsuarioCorrecto() {
@@ -113,7 +97,7 @@ public class UsuarioServiceImplTest {
     
     @Test
     public void buscarPorCodUsuario_UsuarioNoEncontrado() {
-    	when(usuarioDao.findByCodUsuario(any())).thenThrow(ApiException.class);
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(null);
         assertThrows(ApiException.class, () -> {
         	usuarioService.buscarPorCodUsuario("");
         });
@@ -128,7 +112,7 @@ public class UsuarioServiceImplTest {
     
     @Test
     public void buscarPorIdUsuario_UsuarioNoEncontrado() {
-    	when(usuarioDao.findByIdUsuario(any())).thenThrow(ApiException.class);
+    	when(usuarioDao.findByIdUsuario(any())).thenReturn(null);
         assertThrows(ApiException.class, () -> {
         	usuarioService.buscarPorIdUsuario(1);
         });

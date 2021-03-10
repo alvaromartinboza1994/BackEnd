@@ -37,20 +37,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	@Transactional
-	public Usuario buscarPorNombreYApellidos(String nombre, String apellidos) {
-		try {
-			return usuarioDao.findByNombreAndApellidos(nombre, apellidos);
-		} catch (Exception e) {
-			throw new ApiException("USER_NOT_FOUND", "No existe el usuario " + nombre + " " + apellidos);
-		}
-	}
-
-	@Override
-	@Transactional
 	public Usuario buscarPorCodUsuario(String codUsuario) {
-		try {
-			return usuarioDao.findByCodUsuario(codUsuario);
-		} catch (Exception e) {
+		Usuario usuario_db = usuarioDao.findByCodUsuario(codUsuario);
+		if(usuario_db != null) {
+			return usuario_db;
+		} else {
 			throw new ApiException("USER_NOT_FOUND", "No existe el usuario " + codUsuario);
 		}
 	}
@@ -58,9 +49,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	@Transactional
 	public Usuario buscarPorIdUsuario(Integer idUsuario) {
-		try {
-			return usuarioDao.findByIdUsuario(idUsuario);
-		} catch (Exception e) {
+		Usuario usuario_db = usuarioDao.findByIdUsuario(idUsuario);
+		if(usuario_db != null) {
+			return usuario_db;
+		} else {
 			throw new ApiException("USER_NOT_FOUND", "No existe el usuario con Id: " + idUsuario);
 		}
 	}
@@ -72,7 +64,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		if(signup.getContraseña().equals(usuarioContrasena.getContraseña())) {
 			return new ResponseEntity<>("Acceso realizado con éxito!", HttpStatus.OK);
 		} else {
-			throw new ApiException("PASSWORD_INCORRECT", "La contraseña no coincide con la registrada en el sistema");
+			return new ResponseEntity<>("La contraseña no coincide con la registrada en el sistema,", HttpStatus.FORBIDDEN);
 		}
 	}
 

@@ -18,9 +18,6 @@ public interface UsuarioControllerI {
 	
 	@GetMapping("/accederUsuario")
 	public ResponseEntity<String> accederUsuario(@RequestBody UsuarioContrasena signup);
-
-	@GetMapping("/buscarUsuario")
-	public ResponseEntity<Usuario> buscarUsuario(@RequestBody Usuario usuario);
 	
 	@GetMapping("/buscarUsuario/{codUsuario}")
 	public ResponseEntity<Usuario> buscarUsuario(@PathVariable String codUsuario);

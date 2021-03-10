@@ -55,7 +55,7 @@ public class GrupoServiceImplTest {
     
     @Test
     public void buscarGrupo_GrupoNoEncontrado() {
-    	when(grupoDao.findByIdNombreGrupo(any())).thenThrow(ApiException.class);
+    	when(grupoDao.findByIdNombreGrupo(any())).thenReturn(null);
         assertThrows(ApiException.class, () -> {
         	grupoService.buscarGrupo("");
         });

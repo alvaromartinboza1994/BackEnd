@@ -59,7 +59,7 @@ public class UsuarioContrasenaServiceImplTest {
     
     @Test
     public void buscarPorUsuarioCodUsuario_ApiException() throws Exception {
-    	when(usuarioContrasenaDao.findByUsuarioCodUsuario(any())).thenThrow(ApiException.class);
+    	when(usuarioContrasenaDao.findByUsuarioCodUsuario(any())).thenReturn(null);
         assertThrows(ApiException.class, () -> usuarioContrasenaService.buscarPorUsuarioCodUsuario(""));
     }
 

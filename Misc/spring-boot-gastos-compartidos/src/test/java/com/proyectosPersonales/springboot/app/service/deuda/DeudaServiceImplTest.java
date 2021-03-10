@@ -65,7 +65,7 @@ public class DeudaServiceImplTest {
     
     @Test
     public void buscarDeuda_ApiException() throws Exception {
-    	when(deudaDao.findByIdDeuda(any())).thenThrow(ApiException.class);
+    	when(deudaDao.findByIdDeuda(any())).thenReturn(null);
         assertThrows(ApiException.class, () -> deudaService.buscarDeudaPorIdDeuda(1));
     }
 }

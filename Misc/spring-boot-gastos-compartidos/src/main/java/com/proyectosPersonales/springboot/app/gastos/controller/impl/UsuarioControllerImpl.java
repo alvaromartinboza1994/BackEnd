@@ -36,11 +36,6 @@ public class UsuarioControllerImpl implements UsuarioControllerI{
 	public ResponseEntity<String> accederUsuario(@RequestBody UsuarioContrasena signup) {
 		return usuarioService.accederUsuario(signup);
 	}
-
-	@Override
-	public ResponseEntity<Usuario> buscarUsuario(@RequestBody Usuario usuario) {
-		return new ResponseEntity<>(usuarioService.buscarPorNombreYApellidos(usuario.getNombre(), usuario.getApellidos()), HttpStatus.OK);
-	}
 	
 	@Override
 	public ResponseEntity<Usuario> buscarUsuario(@PathVariable String codUsuario) {

@@ -30,9 +30,10 @@ public class UsuarioContrasenaServiceImpl implements UsuarioContrasenaService {
 	@Override
 	@Transactional
 	public UsuarioContrasena buscarPorUsuarioCodUsuario(String codUsuario) {
-		try {
-			return usuarioContrasenaDao.findByUsuarioCodUsuario(codUsuario);
-		} catch (Exception e) {
+		UsuarioContrasena usuarioContrasena = usuarioContrasenaDao.findByUsuarioCodUsuario(codUsuario);
+		if(usuarioContrasena != null) {
+			return usuarioContrasena;
+		} else {
 			throw new ApiException("USER_NOT_FOUND", "No existe el usuario " + codUsuario);
 		}
 	}

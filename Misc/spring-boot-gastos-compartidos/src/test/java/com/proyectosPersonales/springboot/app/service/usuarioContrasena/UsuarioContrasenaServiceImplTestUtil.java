@@ -13,5 +13,13 @@ public class UsuarioContrasenaServiceImplTestUtil {
 				.usuario(crearUsuarioCorrecto())
 				.build();
 	}
+    
+    public static UsuarioContrasena crearUsuarioContrasenaCorrecto2() {
+		return UsuarioContrasena.builder()
+				.idLogin(1)
+				.contraseña("4567")
+				.usuario(crearUsuarioCorrecto())
+				.build();
+	}
 	
 }

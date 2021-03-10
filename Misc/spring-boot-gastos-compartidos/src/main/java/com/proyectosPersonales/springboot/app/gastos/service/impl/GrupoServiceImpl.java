@@ -66,9 +66,10 @@ public class GrupoServiceImpl implements GrupoService {
 	@Override
 	@Transactional
 	public Grupo buscarGrupo(String nombreGrupo) {
-		try {
-			return grupoDao.findByIdNombreGrupo(nombreGrupo);
-		} catch (Exception e) {
+		Grupo grupo = grupoDao.findByIdNombreGrupo(nombreGrupo);
+		if(grupo != null) {
+			return grupo;
+		} else {
 			throw new ApiException("GRUPO_NOT_FOUND", "No se ha encontrado el grupo " + nombreGrupo);
 		}
 	}
