@@ -20,7 +20,7 @@ public interface UsuarioControllerI {
 	@PutMapping("/usuario/actualizarUsuario")
 	public ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuario);
 	
-	@GetMapping("/accederUsuario")
+	@PostMapping("/accederUsuario")
 	public ResponseEntity<String> accederUsuario(@RequestBody UsuarioContrasena signup);
 	
 	@GetMapping("/buscarPorCodUsuario/{codUsuario}")
