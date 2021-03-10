@@ -28,7 +28,7 @@ public class UsuarioControllerImpl implements UsuarioControllerI{
 	private UsuarioService usuarioService;
 	
 	@Override
-	public ResponseEntity<Usuario> registrarUsuario(@RequestBody UsuarioContrasena signup) {
+	public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioContrasena signup) {
 		return new ResponseEntity<>(usuarioService.guardarUsuario(signup), HttpStatus.OK);
 	}
 	
@@ -38,13 +38,18 @@ public class UsuarioControllerImpl implements UsuarioControllerI{
 	}
 	
 	@Override
-	public ResponseEntity<Usuario> buscarUsuario(@PathVariable String codUsuario) {
+	public ResponseEntity<Usuario> buscarPorCodUsuario(@PathVariable String codUsuario) {
 		return new ResponseEntity<>(usuarioService.buscarPorCodUsuario(codUsuario), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<String> buscarUsuario() {
 		return new ResponseEntity<>("Bienvenido a la aplicación de Gastos Compartidos", HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Usuario> actualizarUsuario(Usuario usuario) {
+		return new ResponseEntity<>(usuarioService.actualizarUsuario(usuario), HttpStatus.OK);
 	}
 
 }

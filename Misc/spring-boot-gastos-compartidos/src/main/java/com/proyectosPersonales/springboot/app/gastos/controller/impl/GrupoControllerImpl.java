@@ -32,7 +32,7 @@ public class GrupoControllerImpl implements GrupoControllerI{
 	}
 	
 	@Override
-	public ResponseEntity<Grupo> consultarGrupo(@PathVariable String nombreGrupo) {
+	public ResponseEntity<Grupo> buscarGrupo(@PathVariable String nombreGrupo) {
 		return new ResponseEntity<>(grupoService.buscarGrupo(nombreGrupo), HttpStatus.OK);
 	}
 

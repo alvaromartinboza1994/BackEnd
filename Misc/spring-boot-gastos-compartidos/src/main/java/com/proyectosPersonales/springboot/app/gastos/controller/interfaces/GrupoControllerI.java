@@ -18,7 +18,7 @@ public interface GrupoControllerI {
 	@PostMapping("/anadirParticipante/{nombreGrupo}/usuario/{codUsuario}")
 	public ResponseEntity<Grupo> añadirParticipante(@PathVariable String nombreGrupo, @PathVariable String codUsuario);
 	
-	@GetMapping("/consultarGrupo/{nombreGrupo}")
-	public ResponseEntity<Grupo> consultarGrupo(@PathVariable String nombreGrupo);
+	@GetMapping("/buscarGrupo/{nombreGrupo}")
+	public ResponseEntity<Grupo> buscarGrupo(@PathVariable String nombreGrupo);
 
 }
