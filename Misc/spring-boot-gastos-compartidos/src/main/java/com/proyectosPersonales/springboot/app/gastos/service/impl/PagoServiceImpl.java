@@ -129,46 +129,45 @@ public class PagoServiceImpl implements PagoService {
 
 	@Override
 	@Transactional
-	public List<UsuarioDeuda> calcularMinimoPagos(String nombreGrupo) {
-		List<UsuarioDeuda> deudasUnificadas = new ArrayList<>();
-		Grupo grupo_db = grupoService.buscarGrupo(nombreGrupo);
-		if(grupo_db != null) {
-			deudasUnificadas = unificarPagos(grupo_db);
-		}		
-		return deudasUnificadas;
+	public List<List<UsuarioDeuda>> calcularMinimoPagos(String nombreGrupo) {
+		List<Balance> balances = calcularBalance(nombreGrupo);
+		
+		List<List<UsuarioDeuda>> pagares = balances.stream()
+			.filter(balanceP -> balanceP.getImporte() > 0)
+			.map(balanceP -> {
+				Double balancesNegativos = balances.stream()
+											.filter(balanceN -> balanceN.getImporte() < 0)
+											.map(balanceN -> balanceN.getImporte())
+											.collect(Collectors.summingDouble(Double::doubleValue));
+				return balances.stream()
+				.filter(balanceN -> balanceN.getImporte() < 0)
+				.map(balanceN -> {
+					Double porcentaje = (double) (balanceP.getImporte() / balancesNegativos);
+					Double aPagar = porcentaje * balanceN.getImporte();
+					return UsuarioDeuda.builder()
+							.deuda(Deuda.builder()
+									.codPagador(balanceP.getCodUsuario())
+									.importe(aPagar)
+									.build())
+							.deudor(balanceN.getCodUsuario())
+							.build();
+				})
+				.collect(Collectors.toList());
+			})
+			.collect(Collectors.toList());
+		return pagares;
 	}
 
-	public List<UsuarioDeuda> unificarPagos(Grupo grupo) {
-		List<UsuarioDeuda> usuariosDeudas = new ArrayList<>();
-		grupo.getParticipantes().forEach(participante -> {
-			grupo.getParticipantes().forEach(compi -> {
-				if(!participante.getCodUsuario().equals(compi.getCodUsuario())) {
-					List<Deuda> misDeudasUnificadas = participante.getMisDeudas().stream()
-							.filter(deuda -> deuda.getCodPagador().equals(compi.getCodUsuario()))
-							.collect(Collectors.toList());
-					participante.getMisDeudas().removeAll(misDeudasUnificadas);
-					Double totalDeuda = misDeudasUnificadas.stream()
-						.map(Deuda::getImporte)
-						.collect(Collectors.summingDouble(Double::doubleValue));
-					if(totalDeuda > 0) {
-						Calendar calendar = Calendar.getInstance();
-						calendar.setTime(new Date());
-						usuariosDeudas.add(UsuarioDeuda.builder()
-								.deudor(participante.getCodUsuario())
-								.deuda(Deuda.builder()
-										.importe(totalDeuda)
-										.descripcion("Deuda Unificada")
-										.fecha(calendar)
-										.codPagador(compi.getCodUsuario())
-										.build())
-								.build());
-						log.info(usuariosDeudas.toString());
-						
-					}
-				}
-			});
-		});
-		return usuariosDeudas;
-	}
+	/*
+	 * @Override public List<List<UsuarioDeuda>> calcularMinimoPagos_v2(String
+	 * nombreGrupo) { List<Balance> balances = calcularBalance(nombreGrupo);
+	 * balances.stream() .filter(balanceP -> balanceP.getImporte() > 0)
+	 * .map(balanceP -> { balances.stream() .filter(balanceN ->
+	 * balanceN.getImporte() <0) .map(balanceN -> { if(balanceN.getImporte() > 0 &&
+	 * balanceP.getImporte() > 0) { return Balance.builder() .build(); } return
+	 * null; }) .collect(Collectors.toList()); }) .collect(Collectors.toList());
+	 * 
+	 * return null; }
+	 */
 	
 }

@@ -18,7 +18,7 @@ public interface UsuarioControllerI {
 	@PutMapping("/usuario/actualizarUsuario")
 	public ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuario);
 	
-	@GetMapping("/usuario/accederUsuario")
+	@PostMapping("/usuario/accederUsuario")
 	public ResponseEntity<String> accederUsuario(@RequestBody UsuarioContrasena signup);
 	
 	@GetMapping("/usuario/buscarPorCodUsuario/{codUsuario}")

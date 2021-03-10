@@ -80,11 +80,12 @@ public class PagoServiceImplTest {
     	assertFalse(listaBalances.isEmpty());
     }
     
-    @Test
-    public void calcularMinimoPagos_Correcto() {
-    	Grupo grupo = crearGrupoCorrecto_ConParticipantes(crearListaUsuarios());
-    	when(grupoService.buscarGrupo(any())).thenReturn(grupo);
-    	List<UsuarioDeuda> listaUsuariosDeudas = pagoService.calcularMinimoPagos(grupo.getId().getNombreGrupo());
-    	assertFalse(listaUsuariosDeudas.isEmpty());
-    }
+	/*
+	 * @Test public void calcularMinimoPagos_Correcto() { Grupo grupo =
+	 * crearGrupoCorrecto_ConParticipantes(crearListaUsuarios());
+	 * when(grupoService.buscarGrupo(any())).thenReturn(grupo); List<UsuarioDeuda>
+	 * listaUsuariosDeudas =
+	 * pagoService.calcularMinimoPagos(grupo.getId().getNombreGrupo());
+	 * assertFalse(listaUsuariosDeudas.isEmpty()); }
+	 */
 }

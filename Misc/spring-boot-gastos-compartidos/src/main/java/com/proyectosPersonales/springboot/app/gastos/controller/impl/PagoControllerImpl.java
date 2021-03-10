@@ -43,8 +43,8 @@ public class PagoControllerImpl implements PagoControllerI{
 	}
 	
 	@Override
-	public ResponseEntity<List<UsuarioDeuda>> calcularMinimoPagos(@PathVariable String nombreGrupo) {
-		return new ResponseEntity<>(pagoService.calcularMinimoPagos(nombreGrupo), HttpStatus.OK);
+	public List<List<UsuarioDeuda>> calcularMinimoPagos(@PathVariable String nombreGrupo) {
+		return pagoService.calcularMinimoPagos(nombreGrupo);
 	}
 
 }
