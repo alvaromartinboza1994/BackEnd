@@ -4,7 +4,6 @@ package com.proyectosPersonales.springboot.app.gastos.service.interfaces;
 import java.util.List;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Balance;
-import com.proyectosPersonales.springboot.app.gastos.dto.Deuda;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioDeuda;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;

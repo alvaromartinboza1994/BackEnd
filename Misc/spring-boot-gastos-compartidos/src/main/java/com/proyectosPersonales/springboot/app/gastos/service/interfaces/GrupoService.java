@@ -2,7 +2,6 @@
 package com.proyectosPersonales.springboot.app.gastos.service.interfaces;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Grupo;
-import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
 
 public interface GrupoService {
 

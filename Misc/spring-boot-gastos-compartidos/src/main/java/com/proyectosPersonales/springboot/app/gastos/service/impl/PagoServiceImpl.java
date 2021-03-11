@@ -2,9 +2,7 @@
 package com.proyectosPersonales.springboot.app.gastos.service.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +23,7 @@ import com.proyectosPersonales.springboot.app.gastos.service.interfaces.GrupoSer
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.PagoService;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class PagoServiceImpl implements PagoService {
 	
 	@Autowired
