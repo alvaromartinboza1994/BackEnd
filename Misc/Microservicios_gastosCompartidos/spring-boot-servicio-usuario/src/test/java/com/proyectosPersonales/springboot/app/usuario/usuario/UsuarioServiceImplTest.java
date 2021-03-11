@@ -1,11 +1,12 @@
 package com.proyectosPersonales.springboot.app.usuario.usuario;
 
 import static com.proyectosPersonales.springboot.app.usuario.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto;
-import static com.proyectosPersonales.springboot.app.usuario.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto2;
-import static com.proyectosPersonales.springboot.app.usuario.usuario.UsuarioServiceImplTestUtil.crearUsuarioVacio;
-import static com.proyectosPersonales.springboot.app.usuario.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.*;
+import static com.proyectosPersonales.springboot.app.usuario.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto_ConGrupo;
+import static com.proyectosPersonales.springboot.app.usuario.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto_ConGrupo_UsuarioNull;
+import static com.proyectosPersonales.springboot.app.usuario.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto_ConGrupo_UsuarioSinInicializar;
+import static com.proyectosPersonales.springboot.app.usuario.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.crearUsuarioContrasenaCorrecto;
+import static com.proyectosPersonales.springboot.app.usuario.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.crearUsuarioContrasenaCorrecto2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -27,7 +28,7 @@ import com.proyectosPersonales.springboot.app.usuario.service.impl.UsuarioServic
 @ExtendWith(MockitoExtension.class)
 public class UsuarioServiceImplTest {
 
-    @InjectMocks
+	@InjectMocks
     private UsuarioServiceImpl usuarioService;
     
     @Mock
@@ -67,25 +68,36 @@ public class UsuarioServiceImplTest {
     }
     
     @Test
+    public void actualizarUsuario_Correcto() {
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
+    	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
+        Usuario usuario_actualizado = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo());
+        assertEquals(usuario_actualizado, crearUsuarioCorrecto());
+    }
+    
+    @Test
+    public void actualizarUsuario_UsuarioEsNull() {
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
+    	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
+        Usuario usuario_actualizado = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo_UsuarioNull());
+        assertEquals(usuario_actualizado, crearUsuarioCorrecto());
+    }
+    
+    @Test
+    public void actualizarUsuario_UsuarioSinInicializar() {
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
+    	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
+        Usuario usuario_actualizado = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo_UsuarioSinInicializar());
+        assertEquals(usuario_actualizado, crearUsuarioCorrecto());
+    }
+    
+    @Test
     public void actualizarUsuario_ApiException() {
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	when(usuarioDao.save(any())).thenThrow(ApiException.class);
         assertThrows(ApiException.class, () -> {
-        	usuarioService.actualizarUsuario(crearUsuarioCorrecto());
+        	usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo());
         });
-    }
-    
-    @Test
-    public void guardarUsuario_UsuarioVacio() throws Exception {
-    	when(usuarioDao.save(any())).thenReturn(crearUsuarioVacio());
-        Usuario usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto());
-        assertNotEquals(usuario, crearUsuarioCorrecto());
-    }
-    
-    @Test
-    public void guardarUsuario_UsuarioDistinto() throws Exception {
-    	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
-        Usuario usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto2());
-        assertNotEquals(usuario.getNombre(), crearUsuarioCorrecto2().getNombre());
     }
 
     @Test

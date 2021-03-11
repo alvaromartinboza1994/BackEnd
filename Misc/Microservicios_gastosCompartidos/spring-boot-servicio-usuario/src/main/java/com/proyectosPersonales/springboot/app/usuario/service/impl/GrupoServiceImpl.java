@@ -12,6 +12,7 @@ import com.proyectosPersonales.springboot.app.commons.dto.Grupo;
 import com.proyectosPersonales.springboot.app.commons.dto.Usuario;
 import com.proyectosPersonales.springboot.app.commons.dto.GrupoPK;
 import com.proyectosPersonales.springboot.app.commons.exception.ApiException;
+import com.proyectosPersonales.springboot.app.commons.dto.UsuarioActualizar;
 import com.proyectosPersonales.springboot.app.usuario.dao.GrupoDaoI;
 import com.proyectosPersonales.springboot.app.usuario.packages.service.interfaces.GrupoService;
 import com.proyectosPersonales.springboot.app.usuario.packages.service.interfaces.UsuarioService;
@@ -33,7 +34,7 @@ public class GrupoServiceImpl implements GrupoService {
 		if(usuario_db != null) {
 			miGrupo = Grupo.builder().id(GrupoPK.builder().nombreGrupo(nombreGrupo).idGrupo(grupoDao.findAll().size()+1).build()).participantes(Arrays.asList(usuario_db)).build();
 			usuario_db.setMiGrupo(miGrupo.getId().getNombreGrupo());
-			usuarioService.actualizarUsuario(usuario_db);
+			usuarioService.actualizarUsuario(UsuarioActualizar.builder().codUsuario_Antiguo(codUsuario).nuevo(usuario_db).build());
 		}
 		try {
 			return grupoDao.save(miGrupo);
@@ -52,7 +53,7 @@ public class GrupoServiceImpl implements GrupoService {
 			if(grupo_db != null) {
 				grupo_db.getParticipantes().add(usuario_db);
 				usuario_db.setMiGrupo(grupo_db.getId().getNombreGrupo());
-				usuarioService.actualizarUsuario(usuario_db);
+				usuarioService.actualizarUsuario(UsuarioActualizar.builder().codUsuario_Antiguo(codUsuario).nuevo(usuario_db).build());
 			}			
 		}
 		try {
