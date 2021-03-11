@@ -25,11 +25,11 @@ public class Deuda {
 	@Column(name = "idDeuda")
 	private Integer idDeuda;
 
-	private Double importe; // importe del pago
+	private Double importe; 
 
-	private String descripcion;// descripcion del pago
+	private String descripcion;
 
-	private Calendar fecha;// fecha en la que se realizó el pago
+	private Calendar fecha;
 	
 	private String codPagador;
 
