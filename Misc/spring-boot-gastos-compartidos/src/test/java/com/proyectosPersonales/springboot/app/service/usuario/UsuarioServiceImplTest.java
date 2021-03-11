@@ -1,6 +1,6 @@
 package com.proyectosPersonales.springboot.app.service.usuario;
 
-import static com.proyectosPersonales.springboot.app.service.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto;
+import static com.proyectosPersonales.springboot.app.service.usuario.UsuarioServiceImplTestUtil.*;
 import static com.proyectosPersonales.springboot.app.service.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.crearUsuarioContrasenaCorrecto;
 import static com.proyectosPersonales.springboot.app.service.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.crearUsuarioContrasenaCorrecto2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,11 +64,27 @@ public class UsuarioServiceImplTest {
         assertEquals(entity.getStatusCode(), HttpStatus.FORBIDDEN);
     }
     
-    /*@Test
+    @Test
     public void actualizarUsuario_Correcto() {
     	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
-        Usuario usuario_actualizado = usuarioService.actualizarUsuario(crearUsuarioCorrecto());
+        Usuario usuario_actualizado = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo());
+        assertEquals(usuario_actualizado, crearUsuarioCorrecto());
+    }
+    
+    @Test
+    public void actualizarUsuario_UsuarioEsNull() {
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
+    	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
+        Usuario usuario_actualizado = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo_UsuarioNull());
+        assertEquals(usuario_actualizado, crearUsuarioCorrecto());
+    }
+    
+    @Test
+    public void actualizarUsuario_UsuarioSinInicializar() {
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
+    	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
+        Usuario usuario_actualizado = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo_UsuarioSinInicializar());
         assertEquals(usuario_actualizado, crearUsuarioCorrecto());
     }
     
@@ -77,9 +93,9 @@ public class UsuarioServiceImplTest {
     	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	when(usuarioDao.save(any())).thenThrow(ApiException.class);
         assertThrows(ApiException.class, () -> {
-        	usuarioService.actualizarUsuario(crearUsuarioCorrecto());
+        	usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo());
         });
-    }*/
+    }
 
     @Test
     public void buscarPorCodUsuario_UsuarioCorrecto() {

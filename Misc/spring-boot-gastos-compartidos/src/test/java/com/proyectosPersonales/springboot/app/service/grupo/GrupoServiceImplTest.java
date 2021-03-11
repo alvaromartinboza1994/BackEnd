@@ -35,16 +35,16 @@ public class GrupoServiceImplTest {
     @Mock
     UsuarioService usuarioService;
 
-    /*@Test
+    @Test
     public void crearGrupo_Correcto() throws Exception {
     	when(usuarioService.buscarPorCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	Usuario usuario = usuarioService.buscarPorCodUsuario("");
-    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo());
+    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo().getNuevo());
     	usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo());
     	when(grupoDao.save(any())).thenReturn(crearGrupoCorrecto());
     	Grupo grupo = grupoService.crearGrupo("", "");
         assertEquals(grupo.getId().getNombreGrupo(), usuario.getMiGrupo());
-    }*/
+    }
     
     @Test
     public void buscarGrupo_GrupoCorrecto() {
@@ -66,28 +66,28 @@ public class GrupoServiceImplTest {
     	when(usuarioService.buscarPorCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	Usuario usuario = usuarioService.buscarPorCodUsuario("");
     	when(grupoDao.findByIdNombreGrupo(any())).thenReturn(crearGrupoCorrecto());
-    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo());
+    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo().getNuevo());
     	when(grupoDao.save(any())).thenReturn(crearGrupoCorrecto_ConParticipante(crearUsuarioCorrecto()));
     	Grupo grupo = grupoService.añadirParticipante("", "");
         assertFalse(grupo.getParticipantes().isEmpty());
     }
     
-    /*@Test
+    @Test
     public void crearGrupo_ApiException() throws Exception {
     	when(usuarioService.buscarPorCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	Usuario usuario = usuarioService.buscarPorCodUsuario("");
-    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo());
+    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo().getNuevo());
     	usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo());
     	when(grupoDao.save(any())).thenThrow(ApiException.class);
         assertThrows(ApiException.class, () -> grupoService.crearGrupo("", ""));
-    }*/
+    }
     
     @Test
     public void añadirParticipante_ApiException() {
     	when(usuarioService.buscarPorCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	Usuario usuario = usuarioService.buscarPorCodUsuario("");
     	when(grupoDao.findByIdNombreGrupo(any())).thenReturn(crearGrupoCorrecto());
-    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo());
+    	when(usuarioService.actualizarUsuario(any())).thenReturn(crearUsuarioCorrecto_ConGrupo().getNuevo());
     	when(grupoDao.save(any())).thenThrow(ApiException.class);
     	assertThrows(ApiException.class, () -> grupoService.añadirParticipante("", ""));
     }

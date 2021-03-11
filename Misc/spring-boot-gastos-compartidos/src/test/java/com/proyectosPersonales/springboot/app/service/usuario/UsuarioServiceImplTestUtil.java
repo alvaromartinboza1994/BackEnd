@@ -11,6 +11,7 @@ import org.assertj.core.util.Arrays;
 import com.proyectosPersonales.springboot.app.gastos.dto.Deuda;
 import com.proyectosPersonales.springboot.app.gastos.dto.Pago;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioActualizar;
 
 public class UsuarioServiceImplTestUtil {
 	
@@ -27,18 +28,34 @@ public class UsuarioServiceImplTestUtil {
 				.build();
 	}
 	
-	public static Usuario crearUsuarioCorrecto_ConGrupo() {
+	public static UsuarioActualizar crearUsuarioCorrecto_ConGrupo() {
 		List<Pago> listaPagos = new ArrayList<>();
 		listaPagos.add(Pago.builder()
 				.importe(1D)
 				.build());
-		return Usuario.builder()
-				.nombre("N")
-				.apellidos("AP1")
-				.codUsuario("NAP1")
-				.miGrupo("misAmigos")
-				.misPagos(listaPagos)
-				.misDeudas(new ArrayList<>())
+		return UsuarioActualizar.builder()
+				.codUsuario_Antiguo("")
+				.nuevo(Usuario.builder()
+						.nombre("N")
+						.apellidos("AP1")
+						.codUsuario("NAP1")
+						.miGrupo("misAmigos")
+						.misPagos(listaPagos)
+						.misDeudas(new ArrayList<>())
+						.build())
+				.build();
+	}
+	
+	public static UsuarioActualizar crearUsuarioCorrecto_ConGrupo_UsuarioNull() {
+		return UsuarioActualizar.builder()
+				.codUsuario_Antiguo("")
+				.build();
+	}
+	
+	public static UsuarioActualizar crearUsuarioCorrecto_ConGrupo_UsuarioSinInicializar() {
+		return UsuarioActualizar.builder()
+				.codUsuario_Antiguo("")
+				.nuevo(Usuario.builder().build())
 				.build();
 	}
 	
