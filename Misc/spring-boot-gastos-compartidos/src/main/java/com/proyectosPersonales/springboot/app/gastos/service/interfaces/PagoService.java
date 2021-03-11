@@ -18,7 +18,5 @@ public interface PagoService {
 	List<Balance> calcularBalance(String nombreGrupo);
 	
 	List<List<UsuarioDeuda>> calcularMinimoPagos(String nombreGrupo);
-	
-	List<List<UsuarioDeuda>> calcularMinimoPagos_v2(String nombreGrupo);
 
 }

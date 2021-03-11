@@ -17,16 +17,16 @@ public interface UsuarioControllerI {
 	@PostMapping("/guardarUsuario")
 	public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioContrasena signup);
 	
-	@PutMapping("/usuario/actualizarUsuario")
+	@PutMapping("/actualizarUsuario")
 	public ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuario);
 	
-	@PostMapping("/accederUsuario")
-	public ResponseEntity<String> accederUsuario(@RequestBody UsuarioContrasena signup);
+	@GetMapping("/accederUsuario/{codUsuario}/contrasena/{contrasena}")
+	public ResponseEntity<String> accederUsuario(@PathVariable String codUsuario, @PathVariable String contrasena);
 	
 	@GetMapping("/buscarPorCodUsuario/{codUsuario}")
 	public ResponseEntity<Usuario> buscarPorCodUsuario(@PathVariable String codUsuario);
 	
 	@GetMapping("/welcome")
-	public ResponseEntity<String> buscarUsuario();
+	public ResponseEntity<String> welcome();
 
 }

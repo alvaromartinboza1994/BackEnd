@@ -28,22 +28,22 @@ public class PagoControllerImpl implements PagoControllerI{
 	private PagoService pagoService;
 	
 	@Override
-	public ResponseEntity<Usuario> añadirPago(@RequestBody UsuarioPago usuarioPago) {
+	public ResponseEntity<Usuario> añadirPago(UsuarioPago usuarioPago) {
 		return new ResponseEntity<>(pagoService.añadirUsuarioPago(usuarioPago), HttpStatus.OK);
 	}
 	
 	@Override
-	public ResponseEntity<List<UsuarioPago>> consultarPagosCompartidos(@PathVariable String nombreGrupo) {
+	public ResponseEntity<List<UsuarioPago>> consultarPagosCompartidos(String nombreGrupo) {
 		return new ResponseEntity<>(pagoService.consultarPagosCompartidos(nombreGrupo), HttpStatus.OK);
 	}
 	
 	@Override
-	public ResponseEntity<List<Balance>> calcularBalance(@PathVariable String nombreGrupo) {
+	public ResponseEntity<List<Balance>> calcularBalance(String nombreGrupo) {
 		return new ResponseEntity<>(pagoService.calcularBalance(nombreGrupo), HttpStatus.OK);
 	}
 	
 	@Override
-	public List<List<UsuarioDeuda>> calcularMinimoPagos(@PathVariable String nombreGrupo) {
+	public List<List<UsuarioDeuda>> calcularMinimoPagos(String nombreGrupo) {
 		return pagoService.calcularMinimoPagos(nombreGrupo);
 	}
 

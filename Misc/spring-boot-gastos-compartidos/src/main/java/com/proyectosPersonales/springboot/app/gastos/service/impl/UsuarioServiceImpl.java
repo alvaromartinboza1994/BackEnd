@@ -71,8 +71,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	@Transactional
 	public Usuario actualizarUsuario(Usuario usuario) {
+		Usuario usuario_db = buscarPorCodUsuario(usuario.getCodUsuario());
 		try {
-			return usuarioDao.save(usuario);
+			return usuarioDao.save(Usuario.builder()
+					.idUsuario(usuario_db.getIdUsuario())
+					.nombre(usuario.getNombre() != null ? usuario.getNombre() : usuario_db.getNombre())
+					.apellidos(usuario.getApellidos() != null ? usuario.getApellidos() : usuario_db.getApellidos())
+					.codUsuario(usuario.getCodUsuario() != null ? usuario.getCodUsuario() : usuario_db.getCodUsuario())
+					.misPagos(usuario.getMisPagos() != null ? usuario.getMisPagos() : usuario_db.getMisPagos())
+					.misDeudas(usuario.getMisDeudas() != null ? usuario.getMisDeudas() : usuario_db.getMisDeudas())
+					.miGrupo(usuario.getMiGrupo() != null ? usuario.getMiGrupo() : usuario_db.getMiGrupo())
+					.build());
 		} catch (Exception e) {
 			throw new ApiException("USER_UPDATE", "No se ha podido actualizar al usuario " + usuario.toString());
 		}

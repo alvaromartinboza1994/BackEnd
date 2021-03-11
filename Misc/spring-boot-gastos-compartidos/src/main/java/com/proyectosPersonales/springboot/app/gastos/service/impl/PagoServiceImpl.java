@@ -167,7 +167,7 @@ public class PagoServiceImpl implements PagoService {
 	 * balanceP.getImporte() > 0) { return Balance.builder() .build(); } return
 	 * null; }) .collect(Collectors.toList()); }) .collect(Collectors.toList());
 	 * 
-	 * return null; }
+	 * return null;mi  }
 	 */
 	
 }
