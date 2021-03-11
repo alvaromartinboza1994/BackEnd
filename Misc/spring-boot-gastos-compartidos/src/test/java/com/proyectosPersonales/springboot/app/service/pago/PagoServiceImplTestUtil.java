@@ -25,9 +25,12 @@ public class PagoServiceImplTestUtil {
 	}
 	
 	public static Usuario crearUsuarioCorrecto_ConPago() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
 		List<Pago> listaPagos = new ArrayList<>();
 		listaPagos.add(Pago.builder()
 				.importe(1D)
+				.fecha(calendar)
 				.build());
 		return Usuario.builder()
 				.nombre("N2")

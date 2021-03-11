@@ -16,6 +16,7 @@ import com.proyectosPersonales.springboot.app.gastos.dto.Deuda;
 import com.proyectosPersonales.springboot.app.gastos.dto.Grupo;
 import com.proyectosPersonales.springboot.app.gastos.dto.Pago;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioActualizar;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioDeuda;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioPago;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.BalanceService;
@@ -57,12 +58,12 @@ public class PagoServiceImpl implements PagoService {
 								.codPagador(usuario_db.getCodUsuario())
 								.build();
 						participante_db.getMisDeudas().add(deuda);
-						usuarioService.actualizarUsuario(participante_db);
+						usuarioService.actualizarUsuario(UsuarioActualizar.builder().codUsuario_Antiguo(participante_db.getCodUsuario()).nuevo(participante_db).build());
 					}			
 				});
 			}
 		}
-		return usuarioService.actualizarUsuario(usuario_db);
+		return usuarioService.actualizarUsuario(UsuarioActualizar.builder().codUsuario_Antiguo(usuario_db.getCodUsuario()).nuevo(usuario_db).build());
 	}
 
 	@Override
@@ -152,17 +153,5 @@ public class PagoServiceImpl implements PagoService {
 			.collect(Collectors.toList());
 		return pagares;
 	}
-
-	/*
-	 * @Override public List<List<UsuarioDeuda>> calcularMinimoPagos_v2(String
-	 * nombreGrupo) { List<Balance> balances = calcularBalance(nombreGrupo);
-	 * balances.stream() .filter(balanceP -> balanceP.getImporte() > 0)
-	 * .map(balanceP -> { balances.stream() .filter(balanceN ->
-	 * balanceN.getImporte() <0) .map(balanceN -> { if(balanceN.getImporte() > 0 &&
-	 * balanceP.getImporte() > 0) { return Balance.builder() .build(); } return
-	 * null; }) .collect(Collectors.toList()); }) .collect(Collectors.toList());
-	 * 
-	 * return null;mi  }
-	 */
 	
 }

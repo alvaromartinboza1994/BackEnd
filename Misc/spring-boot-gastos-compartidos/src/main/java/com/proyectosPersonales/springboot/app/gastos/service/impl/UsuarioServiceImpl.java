@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioActualizar;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioContrasena;
 import com.proyectosPersonales.springboot.app.gastos.exception.ApiException;
 import com.proyectosPersonales.springboot.app.gastos.repository.UsuarioDaoI;
@@ -70,17 +71,23 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	@Transactional
-	public Usuario actualizarUsuario(Usuario usuario) {
-		Usuario usuario_db = buscarPorCodUsuario(usuario.getCodUsuario());
+	public Usuario actualizarUsuario(UsuarioActualizar usuario) {
+		Usuario usuario_db = buscarPorCodUsuario(usuario.getCodUsuario_Antiguo());
 		try {
 			return usuarioDao.save(Usuario.builder()
 					.idUsuario(usuario_db.getIdUsuario())
-					.nombre(usuario.getNombre() != null ? usuario.getNombre() : usuario_db.getNombre())
-					.apellidos(usuario.getApellidos() != null ? usuario.getApellidos() : usuario_db.getApellidos())
-					.codUsuario(usuario.getCodUsuario() != null ? usuario.getCodUsuario() : usuario_db.getCodUsuario())
-					.misPagos(usuario.getMisPagos() != null ? usuario.getMisPagos() : usuario_db.getMisPagos())
-					.misDeudas(usuario.getMisDeudas() != null ? usuario.getMisDeudas() : usuario_db.getMisDeudas())
-					.miGrupo(usuario.getMiGrupo() != null ? usuario.getMiGrupo() : usuario_db.getMiGrupo())
+					.nombre(usuario.getNuevo() != null && usuario.getNuevo().getNombre() != null ? 
+							usuario.getNuevo().getNombre() : usuario_db.getNombre())
+					.apellidos(usuario.getNuevo() != null && usuario.getNuevo().getApellidos() != null ? 
+							usuario.getNuevo().getApellidos() : usuario_db.getApellidos())
+					.codUsuario(usuario.getNuevo() != null && usuario.getNuevo().getCodUsuario() != null ? 
+							usuario.getNuevo().getCodUsuario() : usuario_db.getCodUsuario())
+					.misPagos(usuario.getNuevo() != null && usuario.getNuevo().getMisPagos() != null ? 
+							usuario.getNuevo().getMisPagos() : usuario_db.getMisPagos())
+					.misDeudas(usuario.getNuevo() != null && usuario.getNuevo().getMisDeudas() != null ? 
+							usuario.getNuevo().getMisDeudas() : usuario_db.getMisDeudas())
+					.miGrupo(usuario.getNuevo() != null && usuario.getNuevo().getMiGrupo() != null ? 
+							usuario.getNuevo().getMiGrupo() : usuario_db.getMiGrupo())
 					.build());
 		} catch (Exception e) {
 			throw new ApiException("USER_UPDATE", "No se ha podido actualizar al usuario " + usuario.toString());

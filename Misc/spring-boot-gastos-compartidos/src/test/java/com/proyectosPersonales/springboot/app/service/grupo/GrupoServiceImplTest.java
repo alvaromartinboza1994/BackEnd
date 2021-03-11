@@ -35,7 +35,7 @@ public class GrupoServiceImplTest {
     @Mock
     UsuarioService usuarioService;
 
-    @Test
+    /*@Test
     public void crearGrupo_Correcto() throws Exception {
     	when(usuarioService.buscarPorCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	Usuario usuario = usuarioService.buscarPorCodUsuario("");
@@ -44,7 +44,7 @@ public class GrupoServiceImplTest {
     	when(grupoDao.save(any())).thenReturn(crearGrupoCorrecto());
     	Grupo grupo = grupoService.crearGrupo("", "");
         assertEquals(grupo.getId().getNombreGrupo(), usuario.getMiGrupo());
-    }
+    }*/
     
     @Test
     public void buscarGrupo_GrupoCorrecto() {
@@ -72,7 +72,7 @@ public class GrupoServiceImplTest {
         assertFalse(grupo.getParticipantes().isEmpty());
     }
     
-    @Test
+    /*@Test
     public void crearGrupo_ApiException() throws Exception {
     	when(usuarioService.buscarPorCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	Usuario usuario = usuarioService.buscarPorCodUsuario("");
@@ -80,7 +80,7 @@ public class GrupoServiceImplTest {
     	usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto_ConGrupo());
     	when(grupoDao.save(any())).thenThrow(ApiException.class);
         assertThrows(ApiException.class, () -> grupoService.crearGrupo("", ""));
-    }
+    }*/
     
     @Test
     public void añadirParticipante_ApiException() {

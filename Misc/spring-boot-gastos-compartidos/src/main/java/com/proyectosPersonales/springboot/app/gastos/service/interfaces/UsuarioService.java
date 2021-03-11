@@ -3,6 +3,7 @@ package com.proyectosPersonales.springboot.app.gastos.service.interfaces;
 import org.springframework.http.ResponseEntity;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioActualizar;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioContrasena;
 
 public interface UsuarioService {
@@ -13,7 +14,7 @@ public interface UsuarioService {
 
 	Usuario guardarUsuario(UsuarioContrasena signup);
 	
-	Usuario actualizarUsuario(Usuario usuario);
+	Usuario actualizarUsuario(UsuarioActualizar usuario);
 	
 	ResponseEntity<String> accederUsuario(UsuarioContrasena signup);
 

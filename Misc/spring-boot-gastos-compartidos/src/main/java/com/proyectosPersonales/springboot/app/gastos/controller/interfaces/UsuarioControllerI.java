@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioActualizar;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioContrasena;
 
 public interface UsuarioControllerI {
@@ -16,7 +17,7 @@ public interface UsuarioControllerI {
 	public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioContrasena signup);
 	
 	@PutMapping("/actualizarUsuario")
-	public ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuario);
+	public ResponseEntity<Usuario> actualizarUsuario(@RequestBody UsuarioActualizar usuario);
 	
 	@GetMapping("/accederUsuario/{codUsuario}/contrasena/{contrasena}")
 	public ResponseEntity<String> accederUsuario(@PathVariable String codUsuario, @PathVariable String contrasena);

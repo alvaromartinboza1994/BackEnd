@@ -27,26 +27,4 @@ public class GrupoServiceImplTestUtil {
 				.participantes(Arrays.asList(usuario))
 				.build();
 	} 
-	
-	public static Grupo crearGrupoCorrecto_ConParticipantes(List<Usuario> usuarios) {
-		return Grupo.builder()
-				.id(GrupoPK.builder()
-						.nombreGrupo("misAmigos")
-						.build())
-				.participantes(usuarios)
-				.build();
-	}  
-	
-	public static Grupo crearGrupoVacio() {
-		return Grupo.builder()
-				.build();
-	}    
-	
-	public static Grupo crearGrupoCorrecto2() {
-		return Grupo.builder()
-				.id(GrupoPK.builder()
-						.nombreGrupo("misAmigos2")
-						.build())
-				.build();
-	}    
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.proyectosPersonales.springboot.app.gastos.controller.interfaces.UsuarioControllerI;
 import com.proyectosPersonales.springboot.app.gastos.dto.Usuario;
+import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioActualizar;
 import com.proyectosPersonales.springboot.app.gastos.dto.UsuarioContrasena;
 import com.proyectosPersonales.springboot.app.gastos.service.interfaces.UsuarioService;
 
@@ -46,7 +47,7 @@ public class UsuarioControllerImpl implements UsuarioControllerI{
 	}
 
 	@Override
-	public ResponseEntity<Usuario> actualizarUsuario(Usuario usuario) {
+	public ResponseEntity<Usuario> actualizarUsuario(UsuarioActualizar usuario) {
 		return new ResponseEntity<>(usuarioService.actualizarUsuario(usuario), HttpStatus.OK);
 	}
 

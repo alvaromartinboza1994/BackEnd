@@ -1,11 +1,9 @@
 package com.proyectosPersonales.springboot.app.service.usuario;
 
 import static com.proyectosPersonales.springboot.app.service.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto;
-import static com.proyectosPersonales.springboot.app.service.usuario.UsuarioServiceImplTestUtil.crearUsuarioCorrecto2;
-import static com.proyectosPersonales.springboot.app.service.usuario.UsuarioServiceImplTestUtil.crearUsuarioVacio;
-import static com.proyectosPersonales.springboot.app.service.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.*;
+import static com.proyectosPersonales.springboot.app.service.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.crearUsuarioContrasenaCorrecto;
+import static com.proyectosPersonales.springboot.app.service.usuarioContrasena.UsuarioContrasenaServiceImplTestUtil.crearUsuarioContrasenaCorrecto2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -66,27 +64,22 @@ public class UsuarioServiceImplTest {
         assertEquals(entity.getStatusCode(), HttpStatus.FORBIDDEN);
     }
     
+    /*@Test
+    public void actualizarUsuario_Correcto() {
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
+    	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
+        Usuario usuario_actualizado = usuarioService.actualizarUsuario(crearUsuarioCorrecto());
+        assertEquals(usuario_actualizado, crearUsuarioCorrecto());
+    }
+    
     @Test
     public void actualizarUsuario_ApiException() {
+    	when(usuarioDao.findByCodUsuario(any())).thenReturn(crearUsuarioCorrecto());
     	when(usuarioDao.save(any())).thenThrow(ApiException.class);
         assertThrows(ApiException.class, () -> {
         	usuarioService.actualizarUsuario(crearUsuarioCorrecto());
         });
-    }
-    
-    @Test
-    public void guardarUsuario_UsuarioVacio() throws Exception {
-    	when(usuarioDao.save(any())).thenReturn(crearUsuarioVacio());
-        Usuario usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto());
-        assertNotEquals(usuario, crearUsuarioCorrecto());
-    }
-    
-    @Test
-    public void guardarUsuario_UsuarioDistinto() throws Exception {
-    	when(usuarioDao.save(any())).thenReturn(crearUsuarioCorrecto());
-        Usuario usuario = usuarioService.actualizarUsuario(crearUsuarioCorrecto2());
-        assertNotEquals(usuario.getNombre(), crearUsuarioCorrecto2().getNombre());
-    }
+    }*/
 
     @Test
     public void buscarPorCodUsuario_UsuarioCorrecto() {

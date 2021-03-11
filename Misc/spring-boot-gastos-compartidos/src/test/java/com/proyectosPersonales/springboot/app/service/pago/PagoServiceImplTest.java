@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -79,13 +80,5 @@ public class PagoServiceImplTest {
     	List<Balance> listaBalances = pagoService.calcularBalance("");
     	assertFalse(listaBalances.isEmpty());
     }
-    
-	/*
-	 * @Test public void calcularMinimoPagos_Correcto() { Grupo grupo =
-	 * crearGrupoCorrecto_ConParticipantes(crearListaUsuarios());
-	 * when(grupoService.buscarGrupo(any())).thenReturn(grupo); List<UsuarioDeuda>
-	 * listaUsuariosDeudas =
-	 * pagoService.calcularMinimoPagos(grupo.getId().getNombreGrupo());
-	 * assertFalse(listaUsuariosDeudas.isEmpty()); }
-	 */
+   
 }
