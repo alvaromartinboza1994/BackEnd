@@ -27,5 +27,5 @@ public interface PagoControllerI {
 	public ResponseEntity<List<Balance>> calcularBalance(@PathVariable String nombreGrupo);
 	
 	@GetMapping("/pago/calcularMinimoPagos/{nombreGrupo}")
-	public ResponseEntity<List<UsuarioDeuda>> calcularMinimoPagos(@PathVariable String nombreGrupo);
+	public List<List<UsuarioDeuda>> calcularMinimoPagos(@PathVariable String nombreGrupo);
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.proyectosPersonales.springboot.app.commons.dto.Balance;
 import com.proyectosPersonales.springboot.app.commons.dto.Grupo;
 import com.proyectosPersonales.springboot.app.commons.dto.Usuario;
+import com.proyectosPersonales.springboot.app.commons.dto.UsuarioActualizar;
 import com.proyectosPersonales.springboot.app.commons.dto.UsuarioContrasena;
 
 
@@ -23,10 +24,10 @@ public interface UsuarioClienteRest {
 	public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioContrasena signup);
 	
 	@PutMapping("/usuario/actualizarUsuario")
-	public ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuario);
+	public ResponseEntity<Usuario> actualizarUsuario(@RequestBody UsuarioActualizar usuario);
 	
-	@GetMapping("/usuario/accederUsuario")
-	public ResponseEntity<String> accederUsuario(@RequestBody UsuarioContrasena signup);
+	@GetMapping("/usuario/accederUsuario/{codUsuario}/contrasena/{contrasena}")
+	public ResponseEntity<String> accederUsuario(@PathVariable String codUsuario, @PathVariable String contrasena);
 	
 	@GetMapping("/usuario/buscarPorCodUsuario/{codUsuario}")
 	public ResponseEntity<Usuario> buscarPorCodUsuario(@PathVariable String codUsuario);

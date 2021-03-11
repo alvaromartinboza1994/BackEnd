@@ -2,9 +2,7 @@
 package com.proyectosPersonales.springboot.app.pago.service.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +11,14 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.proyectosPersonales.springboot.app.commons.dto.*;
+import com.proyectosPersonales.springboot.app.commons.dto.Balance;
+import com.proyectosPersonales.springboot.app.commons.dto.Deuda;
+import com.proyectosPersonales.springboot.app.commons.dto.Grupo;
+import com.proyectosPersonales.springboot.app.commons.dto.Pago;
+import com.proyectosPersonales.springboot.app.commons.dto.Usuario;
+import com.proyectosPersonales.springboot.app.commons.dto.UsuarioActualizar;
+import com.proyectosPersonales.springboot.app.commons.dto.UsuarioDeuda;
+import com.proyectosPersonales.springboot.app.commons.dto.UsuarioPago;
 import com.proyectosPersonales.springboot.app.pago.client.UsuarioClienteRest;
 import com.proyectosPersonales.springboot.app.pago.service.interfaces.PagoService;
 
@@ -48,12 +53,12 @@ public class PagoServiceImpl implements PagoService {
 								.codPagador(usuario_db.getCodUsuario())
 								.build();
 						participante_db.getMisDeudas().add(deuda);
-						clienteFeign.actualizarUsuario(participante_db);
+						clienteFeign.actualizarUsuario(UsuarioActualizar.builder().codUsuario_Antiguo(participante_db.getCodUsuario()).nuevo(participante_db).build());
 					}			
 				});
 			}
 		}
-		return clienteFeign.actualizarUsuario(usuario_db).getBody();
+		return clienteFeign.actualizarUsuario(UsuarioActualizar.builder().codUsuario_Antiguo(usuario_db.getCodUsuario()).nuevo(usuario_db).build()).getBody();
 	}
 
 	@Override
@@ -115,46 +120,33 @@ public class PagoServiceImpl implements PagoService {
 
 	@Override
 	@Transactional
-	public List<UsuarioDeuda> calcularMinimoPagos(String nombreGrupo) {
-		List<UsuarioDeuda> deudasUnificadas = new ArrayList<>();
-		Grupo grupo_db = clienteFeign.buscarGrupo(nombreGrupo).getBody();
-		if(grupo_db != null) {
-			deudasUnificadas = unificarPagos(grupo_db);
-		}		
-		return deudasUnificadas;
-	}
-
-	public List<UsuarioDeuda> unificarPagos(Grupo grupo) {
-		List<UsuarioDeuda> usuariosDeudas = new ArrayList<>();
-		grupo.getParticipantes().forEach(participante -> {
-			grupo.getParticipantes().forEach(compi -> {
-				if(!participante.getCodUsuario().equals(compi.getCodUsuario())) {
-					List<Deuda> misDeudasUnificadas = participante.getMisDeudas().stream()
-							.filter(deuda -> deuda.getCodPagador().equals(compi.getCodUsuario()))
-							.collect(Collectors.toList());
-					participante.getMisDeudas().removeAll(misDeudasUnificadas);
-					Double totalDeuda = misDeudasUnificadas.stream()
-						.map(Deuda::getImporte)
-						.collect(Collectors.summingDouble(Double::doubleValue));
-					if(totalDeuda > 0) {
-						Calendar calendar = Calendar.getInstance();
-						calendar.setTime(new Date());
-						usuariosDeudas.add(UsuarioDeuda.builder()
-								.deudor(participante.getCodUsuario())
-								.deuda(Deuda.builder()
-										.importe(totalDeuda)
-										.descripcion("Deuda Unificada")
-										.fecha(calendar)
-										.codPagador(compi.getCodUsuario())
-										.build())
-								.build());
-						log.info(usuariosDeudas.toString());
-						
-					}
-				}
-			});
-		});
-		return usuariosDeudas;
+	public List<List<UsuarioDeuda>> calcularMinimoPagos(String nombreGrupo) {
+		List<Balance> balances = calcularBalance(nombreGrupo);
+		
+		List<List<UsuarioDeuda>> pagares = balances.stream()
+			.filter(balanceP -> balanceP.getImporte() > 0)
+			.map(balanceP -> {
+				Double balancesNegativos = balances.stream()
+											.filter(balanceN -> balanceN.getImporte() < 0)
+											.map(balanceN -> balanceN.getImporte())
+											.collect(Collectors.summingDouble(Double::doubleValue));
+				return balances.stream()
+				.filter(balanceN -> balanceN.getImporte() < 0)
+				.map(balanceN -> {
+					Double porcentaje = (double) (balanceP.getImporte() / balancesNegativos);
+					Double aPagar = porcentaje * balanceN.getImporte();
+					return UsuarioDeuda.builder()
+							.deuda(Deuda.builder()
+									.codPagador(balanceP.getCodUsuario())
+									.importe(aPagar)
+									.build())
+							.deudor(balanceN.getCodUsuario())
+							.build();
+				})
+				.collect(Collectors.toList());
+			})
+			.collect(Collectors.toList());
+		return pagares;
 	}
 	
 }
