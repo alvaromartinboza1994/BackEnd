@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.proyectosPersonales.springboot.app.commons.dto.Usuario;
 
-@Repository
+    
 public interface UsuarioDaoI extends JpaRepository<Usuario, Integer>{
 	
 	Usuario findByNombreAndApellidos(String nombre, String apellidos);

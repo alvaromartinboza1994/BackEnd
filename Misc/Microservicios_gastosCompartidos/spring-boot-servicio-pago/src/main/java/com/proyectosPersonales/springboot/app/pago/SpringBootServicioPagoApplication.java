@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableCircuitBreaker
 @EnableEurekaClient
-@EnableFeignClients //Permite inyectar clientes en controladores u otros componentes de spring
+@EnableFeignClients 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})//deshabilitamos el autoconfiguracion del datasource
 @EntityScan({"com.proyectosPersonales.springboot.app.commons.dto", "com.proyectosPersonales.springboot.app.commons.exception"})

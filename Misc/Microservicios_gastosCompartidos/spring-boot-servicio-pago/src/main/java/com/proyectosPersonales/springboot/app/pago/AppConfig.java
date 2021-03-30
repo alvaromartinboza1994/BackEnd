@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 public class AppConfig {
 
 	@Bean("clienteRest")
-	public RestTemplate registrarRestTemplate() { //cliente http para trabajar con resttempalte, para trabajar con otros servicios
+	public RestTemplate registrarRestTemplate() {
 		return new RestTemplate();
 	}
 }

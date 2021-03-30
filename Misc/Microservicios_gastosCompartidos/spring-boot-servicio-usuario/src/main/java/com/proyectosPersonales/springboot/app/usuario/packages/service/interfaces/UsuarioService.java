@@ -9,7 +9,7 @@ import com.proyectosPersonales.springboot.app.commons.dto.Usuario;
 
 public interface UsuarioService {
 	
-Usuario buscarPorCodUsuario(String codUsuario);
+	Usuario buscarPorCodUsuario(String codUsuario);
 	
 	Usuario buscarPorIdUsuario(Integer idUsuario);
 

@@ -15,7 +15,7 @@ import com.proyectosPersonales.springboot.app.commons.dto.UsuarioActualizar;
 import com.proyectosPersonales.springboot.app.commons.dto.UsuarioContrasena;
 
 
-@FeignClient(name = "servicio-usuario") //indicamos que esta interfaz es un cliente Feign
+@FeignClient(name = "servicio-usuario") 
 public interface UsuarioClienteRest {
 
 	//Usuario
